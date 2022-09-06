@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+    Admin Controls
+{% endblock %}
+
+{% block main %}
+
+<div>
+    <form action="/admin" method="POST">
+
+        <div class="info">
+            <input type="text" autocomplete="off" autofocus required name="file_name" placeholder="file name">
+            <input type="text" autocomplete="off" required name="desc" placeholder="description">
+            <input type="text" autocomplete="off" required name="mtl" placeholder="material type">
+            <input type="text" autocomplete="off" required name="nzl" placeholder="nozzle size">
+            <input type="text" autocomplete="off" required name="support" placeholder="support required?">
+            <input type="text" autocomplete="off" required name="note" placeholder="print notes">
+        </div>
+
+        <div class="stl">
+            <input type="text" autocomplete="off" required name="stl_1" placeholder="stl_1 blob">
+            <input type="text" autocomplete="off" required name="stl_2" placeholder="stl_2 blob">
+        </div>
+
+        <div class="img">
+            <input type="text" autocomplete="off" required name="img_1" placeholder="img_1 blob">
+            <input type="text" autocomplete="off" required name="img_2" placeholder="img_2 blob">
+        </div>
+
+        <div class="gcode">
+            <input type="text" autocomplete="off" required name="gcode_1" placeholder="gcode blob">
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

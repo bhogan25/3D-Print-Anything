@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+    Search
+{% endblock %}
+
+{% block main %}
+<!-- A form containing search boxes that are linked to other sites search boxes like: [thingiverse, thangs, cults3D, free3D, myminifactory, etc] -->
+
+<div>
+    <form action="https://www.thingiverse.com/search" target="_blank" rel="noopener noreferrer">
+        <div class="form-cont">
+            <div class="form-cont-params">
+                <input type="text" name="q" spellcheck="false" autocomplete="off">
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="type" value="thing">
+                <input type="hidden" name="sort" value="popular">
+                <input type="hidden" name="catagory_id" value="0">
+            </div>
+            <div class="form-cont-btn">
+                <input type="submit" value="Search ___ website">
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+{% endblock %}
