@@ -7,7 +7,7 @@
 {% block main %}
 
 <div>
-    <form action="/admin" method="POST">
+    <form action="/admin" method="POST" enctype="multipart/form-data">
 
         <div class="info">
             <input type="text" autocomplete="off" autofocus required name="file_name" placeholder="file name">
@@ -19,17 +19,20 @@
         </div>
 
         <div class="stl">
-            <input type="text" autocomplete="off" required name="stl_1" placeholder="stl_1 blob">
-            <input type="text" autocomplete="off" required name="stl_2" placeholder="stl_2 blob">
+            <span>stl files</span>
+            <input type="file" autocomplete="off" required name="stl_1" >
+            <input type="file" autocomplete="off" required name="stl_2" >
         </div>
 
         <div class="img">
-            <input type="text" autocomplete="off" required name="img_1" placeholder="img_1 blob">
-            <input type="text" autocomplete="off" required name="img_2" placeholder="img_2 blob">
+            <span>image files</span>
+            <input type="file" autocomplete="off" required name="img_1" >
+            <input type="file" autocomplete="off" required name="img_2" >
         </div>
 
         <div class="gcode">
-            <input type="text" autocomplete="off" required name="gcode_1" placeholder="gcode blob">
+            <span>gcode file</span>
+            <input type="file" autocomplete="off" required name="gcode_1" >
         </div>
         <input type="submit" value="Submit">
     </form>
