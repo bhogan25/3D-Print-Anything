@@ -14,7 +14,9 @@
         <!-- Tab Icon -->
         <link href="https://media.istockphoto.com/vectors/3d-printer-extruder-nozzle-icon-vector-3d-printing-nozzle-extruder-vector-id1312092757?k=6&m=1312092757&s=612x612&w=0&h=goe44NCkvsX-rdoWpjXlHsGuKQ9mwg2DbcDBcwlNWr8=" rel="icon">
 
-        <link rel="stylesheet" href="/static/style.css" type="text/css" />
+        <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+
+        {% block head %}{% endblock %}
 
         <title>3D Print Everything: {% block title %}{% endblock %}</title>
 
@@ -37,14 +39,6 @@
                 </div>
             </div>
         </nav>
-
-        {% if get_flashed_messages() %}
-            <header>
-                <div class="alert alert-primary mb-0 text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
-                </div>
-            </header>
-        {% endif %}
 
         <main class="container-fluid py-5 text-center">
             {% block main %}{% endblock %}

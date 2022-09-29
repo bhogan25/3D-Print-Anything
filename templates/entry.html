@@ -1,9 +1,145 @@
 {% extends "layout.html" %}
 
+{% block head %}
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.144.0/build/three.module.js",
+            "STLLoader": "https://unpkg.com/three@0.144.0/examples/jsm/loaders/STLLoader.js",
+            "OrbitControls": "https://unpkg.com/three@0.144.0/examples/jsm/controls/OrbitControls.js",
+            "three/examples/jsm/libs/stats.module": "/jsm/libs/stats.module.js"
+        }
+    }
+</script>
+{% endblock %}
+
 {% block title %} 
-    <!-- - Print name from print info table -->
+    {{ file.title }}
 {% endblock %}
 
 {% block main %}
+<script type="module">
+    import * as THREE from 'three';
+    import { STLLoader } from 'STLLoader';
+    import { OrbitControls } from 'OrbitControls';
 
+    // Retrieve filename from query param or set to defualt
+    let params = new URLSearchParams(document.location.search);
+    let filePath = '../static/stl/';
+    let stlFilename = params.get('filename');
+
+    document.getElementById('log').innerHTML += '<br>Some new content!';
+
+
+    if ( stlFilename ) {
+        console.log(`Query Param filename of value '${stlFilename}' was passed to this page`);
+    } else {
+        console.log('No query Params were passed to this page. Rendering default STL file.');
+        stlFilename = '3DBenchy.stl';
+    }
+
+    let file = filePath.concat(stlFilename);
+
+    // Add scene and camera
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 15, window.innerWidth / window.innerHeight, 0.1, 1500 );
+
+    // Grenerate renderer and pass it to a <canvas> tag that is generated inside the <body> of the HTML doc.
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    // Create Axis helper
+    const axesHelper = new THREE.AxesHelper(5);
+    axesHelper.setColors ( 0xFF0000, 0x00FF00, 0x0000FF );
+    scene.add(axesHelper);
+
+    // Add orbit controls
+    const controls = new OrbitControls( camera, renderer.domElement );
+    controls.maxDistance = 1000;
+    controls.enableDamping = true;
+
+
+    // Add directional lights
+    const color = 0xFFFFFF;
+    const intensity = 0.75;
+    const num = 500;
+
+    const lightI = new THREE.SpotLight( color, intensity );
+    lightI.position.set(num, num, num);
+    scene.add(lightI);
+
+    // const lightII = new THREE.SpotLight( color, intensity );
+    // lightII.position.set(-num, num, num);
+    // scene.add(lightII);
+    
+    const lightIII = new THREE.SpotLight( color, intensity );
+    lightIII.position.set(-num, -num, num);
+    scene.add(lightIII);
+    
+    // const lightIV = new THREE.SpotLight( color, intensity );
+    // lightIV.position.set(num, -num, num);
+    // scene.add(lightIV);
+    
+    // const lightV = new THREE.SpotLight( color, intensity );
+    // lightV.position.set(num, -num, num);
+    // scene.add(lightV);
+
+    const lightVI = new THREE.SpotLight( color, intensity );
+    lightVI.position.set(-num, num, -num);
+    scene.add(lightVI);
+
+    // const lightVII = new THREE.SpotLight( color, intensity );
+    // lightVII.position.set(-20, -20, -20);
+    // scene.add(lightVII);
+
+    const lightVIII = new THREE.SpotLight( color, intensity );
+    lightVIII.position.set(num, -num, -num);
+    scene.add(lightVIII);
+
+
+    // Load STL File
+    const loader = new STLLoader();
+
+    const material = new THREE.MeshPhongMaterial( { color: 0x2471A3, specular: 0x555555, shininess: 20 } );
+
+    try {
+        loader.load( file, function ( geometry ) {
+
+            const mesh = new THREE.Mesh( geometry, material );
+
+            mesh.position.set( 0, - 0.37, - 0.6 );
+            mesh.rotation.set( - Math.PI / 2, 0, 0 );
+            mesh.scale.set( 0.5, 0.5, 0.5 ); // was ( 2, 2, 2 )
+
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+
+            scene.add( mesh );
+
+            // camera.position.x = 100;
+            // camera.position.y = 75;
+            // camera.position.z = 100;
+
+            camera.position.set( 100, 75, 100 )
+        } );
+
+    } catch (error) {
+        console.log(error);
+    }
+    
+    function animate() {
+            requestAnimationFrame( animate );
+
+            // shape.rotation.x += 0.01;
+            // shape.rotation.y += 0.01;
+            controls.update();
+
+            renderer.render( scene, camera );
+        };
+    
+        animate();
+
+</script>
 {% endblock %}

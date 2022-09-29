@@ -7,34 +7,30 @@
 {% block main %}
 
 <div>
-    <form action="/admin" method="POST" enctype="multipart/form-data">
-
-        <div class="info">
-            <input type="text" autocomplete="off" autofocus required name="file_name" placeholder="file name">
-            <input type="text" autocomplete="off" required name="desc" placeholder="description">
-            <input type="text" autocomplete="off" required name="mtl" placeholder="material type">
-            <input type="text" autocomplete="off" required name="nzl" placeholder="nozzle size">
-            <input type="text" autocomplete="off" required name="support" placeholder="support required?">
-            <input type="text" autocomplete="off" required name="note" placeholder="print notes">
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <div>
+                <label class="col-sm-2 col-form-label">Print Title: </label>
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Enter Text" type="text">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-form-label">Description: </label>
+                <textarea class="form-control" rows="3" name="desc" style="max-width: 25%; margin-left: 37.5%;"></textarea>
+            </div>
+            <div>
+                <label class="col-sm-2 col-form-label">STL File: </label>
+                <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="stl_1"  type="file">
+            </div>
+            <div>
+                <label class="col-sm-2 col-form-label">Image File: </label>
+                <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="img_1"  type="file">
+            </div>
+            <div>
+                <label class="col-sm-2 col-form-label">G-code File</label>
+                <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="gcode_1"  type="file">
+            </div>
         </div>
-
-        <div class="stl">
-            <span>stl files</span>
-            <input type="file" autocomplete="off" required name="stl_1" >
-            <input type="file" autocomplete="off" required name="stl_2" >
-        </div>
-
-        <div class="img">
-            <span>image files</span>
-            <input type="file" autocomplete="off" required name="img_1" >
-            <input type="file" autocomplete="off" required name="img_2" >
-        </div>
-
-        <div class="gcode">
-            <span>gcode file</span>
-            <input type="file" autocomplete="off" required name="gcode_1" >
-        </div>
-        <input type="submit" value="Submit">
+        <button class="btn btn-primary" type="submit"> Upload </button>
     </form>
 </div>
 
