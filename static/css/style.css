@@ -1,7 +1,18 @@
 /* Size for brand */
+
+html {
+    margin-bottom: 20px;
+}
+
+body {
+   background-color: #f2f2f2; 
+   font-family: Helvetica, Arial, sans-serif;
+}
+
 nav .navbar-brand
 {
     font-size: xx-large;
+
 }
 
 /* Colors for brand */
@@ -20,4 +31,70 @@ nav .navbar-brand .yellow
 nav .navbar-brand .green
 {
     color: #2e944b;
+}
+
+.card-deck {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin: 10px 10px;
+    padding: 5px;
+    border-radius: 10px;
+    width: 225px;
+    height: 325px;
+  }
+
+/* .card a {
+    width: 100%;
+    border: solid green 1px;
+  } */
+
+.card img {
+    margin-top: 6px;
+    padding: 5px;
+    width: 200px;
+    height: 130px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border: solid #f2f2f2 1px;
+    border-radius: 10px; 
+  }
+
+.card-body {
+    position: relative;
+}
+
+.card-body h5 {
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.card-body p {
+    display: block;
+    max-height: 68px;
+    overflow: hidden;
+    line-height: 17px;
+    /* border: solid orange 1px; */
+    text-align: left;
+    font-size: small;
+}
+
+button.view {
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    bottom: 12px;
+    left: 50%;
+    margin-left: -100px;
+}
+
+button a {
+    color: white;
+    font-size: medium;
 }

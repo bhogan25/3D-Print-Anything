@@ -18,9 +18,12 @@ db = SQL("sqlite:///3d.db")
 ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
 
 # Configure Upload Paths
-app.config["IMAGE_UPLOADS"] = "/mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/Mini_Project_DB/static/img"
-app.config['STL_UPLOADS'] = "/mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/Mini_Project_DB/static/stl"
-app.config['GCODE_UPLOADS'] = "/mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/Mini_Project_DB/static/gcode"
+# OLD LOCATION: /mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/final_project/cs50-final-project/static/<final_location_here>
+# ONE DRIVE LOCATION: /mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project
+
+app.config["IMAGE_UPLOADS"] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/img"
+app.config['STL_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/stl"
+app.config['GCODE_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/gcode"
 
 # Cashe Control
 @app.after_request
@@ -56,29 +59,69 @@ def board():
                 path = app.config['GCODE_UPLOADS']
                 
             else:
-                return redirect("download")
+                return apology("Unable not process request", 400)
   
             print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
             return send_from_directory(path, media, as_attachment=True)
 
     else: 
-        # TODO - Be selective with which data to display.  More will be displayed on the entry page.
-        fileList = db.execute("SELECT title, desc, tstp, stl_filename, img_filename, gcode_filename FROM print_info")
-        print('Fetched files from database:')
-        print(fileList)
+        fileList = db.execute("SELECT title, desc, tstp, stl_filename, img_filename, gcode_filename, post_key FROM print_info")
+        if fileList:
+            print('Fetched files from database:')
+            print(fileList)
+        
+        else:
+            print("No Files were retreived from database")
+        
         return render_template("board.html", fileList=fileList)
     
 
-@app.route("/entry", methods=["GET"])
+@app.route("/entry", methods=["GET", "POST"])
 def entry():
     """3 - Full page view containing all availible info on the the file being viewed"""
-    # TODO - Display all info about print and all files 
 
-    fileList = db.execute("SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename FROM print_info")
-    print('Fetched data from database:')
-    print(fileList)
-    return render_template("entry.html", fileList=fileList)
+    # Download a file from /entry
+    if request.method == "POST":
+        try: 
+            if request.form:
+                media = request.form.get('download')
+                extention = media.rsplit('.', 1)[1].lower()
+
+            if extention == 'stl':
+                path = app.config['STL_UPLOADS']
+
+            elif extention in ALLOWED_IMAGE_EXTENSIONS:
+                path = app.config['IMAGE_UPLOADS']
+
+            elif extention == 'gcode':
+                path = app.config['GCODE_UPLOADS']
+                
+            else:
+                return apology("Unable not process request", 400)
+  
+            print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
+            return send_from_directory(path, media, as_attachment=True)
+        
+        except:
+            return apology("Unable not process request", 400)
+
+
+    # View a post
+    else: 
+        post_key = request.args.get('pk')
+        print(F"FETCHING DATA FOR POST: {post_key}")
+
+    try:
+        postDataList = db.execute("SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename FROM print_info WHERE post_key = ?", post_key)
+        postData = postDataList[0]
+        print('FETCHED DATA FROM DATABASE:')
+        print(postData)
+        return render_template("entry.html", postData=postData)
+
+    except:
+        return apology("Unable not process request", 400) 
    
+ 
 @app.route("/search", methods=["GET"])
 def search():
     """4 - Search other 3D printing sites for files"""
@@ -114,7 +157,7 @@ def admin():
             title = request.form.get('title')
             desc = request.form.get('desc')
             tstp = datetime.now()
-            upload_key = token_hex(13)
+            post_key = token_hex(13)
 
             recieved_files = []
 
@@ -172,23 +215,31 @@ def admin():
                 return apology('No files were submitted', 400)
 
             # 4) TODO Check file size before saving file
-
+            
             print(recieved_files)
 
             # SAVE FORM DATA
-            print(recieved_files)
-
             print("SAVING FORM DATA ---------------------------------------->")
-            db.execute(f"INSERT INTO print_info (title, desc, tstp, upload_key) VALUES(?, ?, ?, ?)",title, desc, tstp, upload_key)
+            try:
+                db.execute(f"INSERT INTO print_info (title, desc, tstp, post_key) VALUES(?, ?, ?, ?)",title, desc, tstp, post_key)
+            
+            except:
+                return apology('An error occured while saving form data to database', 400)
 
             # SAVE FILES TO FOLDER & FILENAMES TO DATABASE
             print("SAVING FILES ---------------------------------------->")
-            for fileDict in recieved_files:
-                print(f"SAVING -- '{fileDict['filename']}' -- TO FILE SYSTEM")
-                fileDict['requestObj'].save(os.path.join(fileDict['uploadPath'], fileDict['filename']))
-                
-                print(f"SAVING -- '{fileDict['filename']}' -- TO DATABASE")
-                db.execute(f"UPDATE print_info SET {fileDict['column']}='{fileDict['filename']}' WHERE upload_key='{upload_key}'")
+            try:
+                for fileDict in recieved_files:
+                    print(f"SAVING -- '{fileDict['filename']}' -- TO FILE SYSTEM")
+                    fileDict['requestObj'].save(os.path.join(fileDict['uploadPath'], fileDict['filename']))
+                    
+                    print(f"SAVING -- '{fileDict['filename']}' -- TO DATABASE")
+                    db.execute(f"UPDATE print_info SET {fileDict['column']}='{fileDict['filename']}' WHERE post_key='{post_key}'")
+            
+            except:
+                # TODO Delete info from form submitted if all files cannot be submitted
+                db.execute(f"DELETE FROM print_info WHERE post_key='{post_key}'")
+                return apology('An error occured while saving files to database', 400)
         
         else:
             return apology('No form data was submitted', 400)

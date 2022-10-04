@@ -5,73 +5,57 @@
 {% endblock %}
 
 {% block main %}
-<div class="row">
-    {% for file in fileList %}
-    <!-- List of print info columns and values -->
 
-        <div class="col-md-4">
-          <div class="card"style="width: 30rem, margin-bottom: 25px;">
-            <div class="card-body">
-              <h3 class="card-title">{{ file.title}}</h3>
-              <p>{{ file.desc }}</p>
-              <p>Uploaded {{ file.tstp }}</p>
+  {% if fileList %}
 
-              <!-- <p>{{ sesh }}</p> -->
+    
 
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">STL</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">G-Code</th>
-                  </tr>
-                </thead>
-                  <form action="/download" method="post">
-                  <tbody>
-                    <tr>
-                        <td>
-                            <div class="mb-3">
-                              {{ file.stl_filename }}
-                            </div>
-                              <input type="radio" name="download" value="{{ file.stl_filename }}">
-                        </td>
-                      {% if (file.img_filename != None) %}
-                        <td>
-                            <div class="mb-3">
-                              {{ file.img_filename }}
-                            </div>
-                              <input type="radio" name="download" value="{{ file.img_filename }}">
-                        </td>
-                      {% else -%}
-                        <td>
-                          <span>Not Available</span>
-                        </td>
-                      {% endif %}
-                      
-                      {% if (file.gcode_filename != None) %}
-                        <td>
-                            <div class="mb-3">
-                              {{ file.gcode_filename }}
-                            </div>
-                              <input type="radio" name="download" value="{{ file.gcode_filename }}">
-                        </td>
-                      {% else -%}
-                        <td>
-                          <span>Not Available</span>
-                        </td>
-                      {% endif %}
-                      </tr>
-                    </tbody>
-                    <button class="btn btn-primary" type="submit"> Download </button>
-                    <button class="btn btn-primary view" type="button"><a href="/elementaryview?filename={{ file.stl_filename }}">View STL File </a></button>
-                  </form>
-              </table>
-            </div>
+    <div class="card-deck">
+
+      {% for file in fileList %}
+        <div class="card">
+
+          {% if (file.img_filename != None) %}
+              <a href="/entry?pk={{ file.post_key }}"><img src="static/img/{{ file.img_filename }}" class="thumbnail"></a>
+              
+          {% else -%} 
+              <canvas class="thumbnail"></canvas>
+      
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ file.title }}</h5>
+            <p class="card-text">{{ file.desc }}</p>
+            <button class="btn btn-primary view" type="button"><a href="/entry?pk={{ file.post_key }}">View STL File </a></button>
           </div>
         </div>
 
-    {% endfor %}
+      {% endfor %}
 
-  </div>
+    </div>
+
+      
+        <!-- <div class="card">
+          <a href="...">
+            <img class="card-img-top thumbnail" src="https://www.w3docs.com/uploads/media/default/0001/03/5bfad15a7fd24d448a48605baf52655a5bbe5a71.jpeg" alt="Card image cap">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div> -->
+        
+
+      
+
+
+  {% else -%}
+    <h1>Very empty... Need more posts...</h1> 
+
+  {% endif %}
   
-{% endblock %}
+  {% endblock %}
+
+
+  {% block footer %}{% endblock %}
