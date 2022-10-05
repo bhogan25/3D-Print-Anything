@@ -33,6 +33,98 @@ nav .navbar-brand .green
     color: #2e944b;
 }
 
+/* entry.html CSS */
+
+.title-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.image-container img {
+    margin-top: 6px;
+    padding: 5px;
+    width: 320px;
+    height: 220px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border: solid rgba(0,0,0,.125) 1px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.title-data-container {
+    background-color: transparent;
+    border-radius: 10px;
+    margin-top: 6px;
+    margin-left: 12px;
+    padding: 15px;
+    max-width: 600px;
+    min-width: 150px;
+    width: 600px;
+    min-height: 200px;
+    text-align: left;
+}
+
+.title-data-container h1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.title-data-container small {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.data-render {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.table-container {
+    margin-top: 6px;
+    padding: 5px;
+    max-width: 350px;
+    min-width: 250px;
+    height: auto;
+    object-fit: cover;
+    border: solid rgba(0,0,0,.125) 1px;
+    background-color: white;
+    border-radius: 10px; 
+}
+
+.table {
+    background-color: white;
+    vertical-align: middle!important;
+    border-radius: 10px;
+    border-color: transparent;
+    margin: 1px;
+}
+
+button.download span {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+canvas#renderView {
+    margin-top: 6px;
+    margin-left: 12px;
+    max-width: 600px;
+    height: auto!important;
+    background-color: #f2f2f2;
+    border: solid black 2px;
+    border-radius: 10px;
+    object-fit: scale-down;
+}
+
+/* board.html CSS */
 .card-deck {
     display: flex;
     flex-direction: row;
@@ -94,7 +186,7 @@ button.view {
     margin-left: -100px;
 }
 
-button a {
+button a.card-link {
     color: white;
     font-size: medium;
 }

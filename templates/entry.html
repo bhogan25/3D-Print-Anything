@@ -25,26 +25,82 @@
 
 
 {% block main %}
+    <div class="title-group">
+        <div class="image-container">
+            <img src="static/img/{{ postData.img_filename }}">
+        </div>
+        <div class="title-data-container" >
+            <h1>{{ postData.title }}</h1>
+            <p>{{ postData.desc }}</p>
+            <small class="text-muted">Posted {{ postData.tstp }}</small>
+        </div>
+    </div>
 
-    <h1>{{ postData.title }}</h1>
-
-    <img src="static/img/{{ postData.img_filename }}">
-
-    <p>Description: {{ postData.desc }}</p>
-    <p>Timestamp: {{ postData.tstp }}</p>
-    <p>Material: {{ postData.mtl }}</p>
-    <p>Nozzle: {{ postData.nzl }}</p>
-    <p>Support: {{ postData.support }}</p>
-    <p>Note: {{ postData.note }}</p>
-    <p>STL Filename: <span id="stl_filename">{{ postData.stl_filename }}</span></p>
-    <p>Img Filename: {{ postData.img_filename }}</p>
-    <p>G-code Filename: {{ postData.gcode_filename }}</p>
-    
+    <div class="data-render">
+        <div class="table-container">
+            <table class="table">
+                <tbody>
+                  <tr>
+                    <th scope="row">Material: </th>
+                    <td>{{ postData.mtl }}</td>
+              
+                  </tr>
+                  <tr>
+                    <th scope="row">Nozzle: </th>
+                    <td>{{ postData.nzl }}</td>
+               
+                  </tr>
+                  <tr>
+                    <th scope="row">Support: </th>
+                    <td>{{ postData.support }}</td>
+              
+                  </tr>
+                  <tr>
+                    <th scope="row">Note: </th>
+                    <td>{{ postData.note }}</td>
+                
+                  </tr>
+                  <tr>
+                    <th scope="row">STL File: </th>
+                    <td>
+            
+                        {% if postData.stl_filename %}
+                            <form method="post" action="/entry">
+                                <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.stl_filename }}">
+                                <button class="btn btn-primary download" type="submit"><span id="stl_filename">{{ postData.stl_filename }}</span></button>
+                            </form>
+                            
+                        {% else -%}
+                            <span id="stl_filename" hidden>default-no-stl.stl</span>
+                            
+                        {% endif %}
+                    </td>
+        
+                    {% if postData.gcode_filename %}
+                        <tr>
+                            <th scope="row">G-Code: </th>
+                            <td>
+                                <form method="post" action="/entry">
+                                    <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.gcode_filename }}">
+                                    <button class="btn btn-primary download" type="submit"><span>{{ postData.gcode_filename }}</span></button>
+                                </form>
+                            </td>
+                    {% endif %}
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        <div class="canvas-container">
+            <canvas id="renderView"></canvas>
+        </div>
+    </div>
+ 
 {% endblock %}
 
 
 {% block footer %}
-    <script type="module">
+
+    <script async type="module">
         import * as THREE from 'three';
         import { STLLoader } from 'STLLoader';
         import { OrbitControls } from 'OrbitControls';
@@ -61,20 +117,21 @@
         if ( stlFilename ) {
             console.log( `Query Param filename of value '${stlFilename}' was passed to this page` );
         } else {
-            console.log( 'No query Params were passed to this page. Rendering default STL file.' );
-            stlFilename = '3DBenchy.stl';
+            console.log( 'Rendering default STL file.' );
+            stlFilename = 'default-no-stl.stl';
         }
 
         let file = filePath.concat( stlFilename );
 
         // Add scene and camera
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera( 15, window.innerWidth / window.innerHeight, 0.1, 1500 );
-
+        const camera = new THREE.PerspectiveCamera( 15, window.innerWidth / window.innerHeight, 0.1, 1500 ); 
+        
         // Grenerate renderer and pass it to a <canvas> tag that is generated inside the <body> of the HTML doc.
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer( { canvas: renderView } );
+        renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( renderer.domElement );
+        // document.body.appendChild( renderer.domElement );
 
         // Create Axis helper
         const axesHelper = new THREE.AxesHelper(5);
@@ -164,4 +221,5 @@
             animate();
 
     </script>
+
 {% endblock %}

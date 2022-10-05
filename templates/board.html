@@ -15,39 +15,24 @@
       {% for file in fileList %}
         <div class="card">
 
-          {% if (file.img_filename != None) %}
-              <a href="/entry?pk={{ file.post_key }}"><img src="static/img/{{ file.img_filename }}" class="thumbnail"></a>
+          {% if file.img_filename %}
+            <a href="/entry?pk={{ file.post_key }}"><img src="static/img/{{ file.img_filename }}" class="thumbnail"></a>
               
           {% else -%} 
-              <canvas class="thumbnail"></canvas>
+            <a href="/entry?pk={{ file.post_key }}"><img src="static/img/default-no-image.png" class="thumbnails"></a>
       
           {% endif %}
 
           <div class="card-body">
             <h5 class="card-title">{{ file.title }}</h5>
             <p class="card-text">{{ file.desc }}</p>
-            <button class="btn btn-primary view" type="button"><a href="/entry?pk={{ file.post_key }}">View STL File </a></button>
+            <button class="btn btn-primary view" type="button"><a href="/entry?pk={{ file.post_key }}" class="card-link">View STL File </a></button>
           </div>
         </div>
 
       {% endfor %}
 
     </div>
-
-      
-        <!-- <div class="card">
-          <a href="...">
-            <img class="card-img-top thumbnail" src="https://www.w3docs.com/uploads/media/default/0001/03/5bfad15a7fd24d448a48605baf52655a5bbe5a71.jpeg" alt="Card image cap">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div> -->
-        
-
-      
 
 
   {% else -%}

@@ -59,7 +59,7 @@ def board():
                 path = app.config['GCODE_UPLOADS']
                 
             else:
-                return apology("Unable not process request", 400)
+                return apology("Unable to process request", 400)
   
             print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
             return send_from_directory(path, media, as_attachment=True)
@@ -86,24 +86,22 @@ def entry():
             if request.form:
                 media = request.form.get('download')
                 extention = media.rsplit('.', 1)[1].lower()
+                print(extention)
 
-            if extention == 'stl':
-                path = app.config['STL_UPLOADS']
-
-            elif extention in ALLOWED_IMAGE_EXTENSIONS:
-                path = app.config['IMAGE_UPLOADS']
-
-            elif extention == 'gcode':
-                path = app.config['GCODE_UPLOADS']
+                if extention == 'stl':
+                    path = app.config['STL_UPLOADS']
                 
-            else:
-                return apology("Unable not process request", 400)
+                elif extention == 'gcode':
+                    path = app.config['GCODE_UPLOADS']
+                
+                else:
+                    return apology("Client request for files not allowed", 400)
   
             print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
             return send_from_directory(path, media, as_attachment=True)
         
         except:
-            return apology("Unable not process request", 400)
+            return apology("Client request bad", 400)
 
 
     # View a post
@@ -111,15 +109,15 @@ def entry():
         post_key = request.args.get('pk')
         print(F"FETCHING DATA FOR POST: {post_key}")
 
-    try:
+        # try:
         postDataList = db.execute("SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename FROM print_info WHERE post_key = ?", post_key)
         postData = postDataList[0]
         print('FETCHED DATA FROM DATABASE:')
         print(postData)
-        return render_template("entry.html", postData=postData)
+        return render_template("entry.html" , postData=postData)
 
-    except:
-        return apology("Unable not process request", 400) 
+        # except:
+        #     return apology("Unable to retreive data from database", 400) 
    
  
 @app.route("/search", methods=["GET"])
