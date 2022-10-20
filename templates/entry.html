@@ -133,6 +133,17 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
         // document.body.appendChild( renderer.domElement );
 
+
+        window.addEventListener("resize", onWindowResize(), false)
+        
+        function onWindowResize(){
+
+            camera.aspect = window.innerWidth / window.innerHeight
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            
+        }
+
         // Create Axis helper
         const axesHelper = new THREE.AxesHelper(5);
         axesHelper.setColors ( 0xFF0000, 0x00FF00, 0x0000FF );
@@ -217,8 +228,8 @@
 
                 renderer.render( scene, camera );
             };
-        
-            animate();
+                    
+        animate();
 
     </script>
 

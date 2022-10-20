@@ -82,12 +82,12 @@ nav .navbar-brand .green
 .data-render {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
     justify-content: center;
 }
 
 .table-container {
-    margin-top: 6px;
+    margin: 6px 6px;
     padding: 5px;
     max-width: 350px;
     min-width: 250px;
@@ -100,10 +100,35 @@ nav .navbar-brand .green
 
 .table {
     background-color: white;
+    min-width: 250px;
     vertical-align: middle!important;
     border-radius: 10px;
     border-color: transparent;
     margin: 1px;
+}
+
+
+@media only screen and (max-width: 957px) {
+    .table-container {
+        margin: 6px 6px;
+        padding: 5px;
+        max-width: 600px;
+        min-width: 250px;
+        height: auto;
+        object-fit: cover;
+        border: solid rgba(0,0,0,.125) 1px;
+        background-color: white;
+        border-radius: 10px; 
+    }
+    
+    .table {
+        background-color: white;
+        min-width: 250px;
+        vertical-align: middle!important;
+        border-radius: 10px;
+        border-color: transparent;
+        margin: 1px;
+    }
 }
 
 button.download span {
@@ -113,16 +138,38 @@ button.download span {
     text-overflow: ellipsis;
 }
 
-canvas#renderView {
-    margin-top: 6px;
-    margin-left: 12px;
-    max-width: 600px;
-    height: auto!important;
-    background-color: #f2f2f2;
-    border: solid black 2px;
-    border-radius: 10px;
-    object-fit: scale-down;
+.canvas-container {
+    display: flex;
+    justify-content: center;
+
 }
+
+canvas#renderView {
+    margin: 6px 6px;
+    max-width: 600px;
+    /* height: auto!important; */
+    max-height: 350px;
+    background-color: black;
+    border: solid transparent 2px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 600px) {
+    canvas#renderView {
+        margin: 6px 6px;
+        max-width: 300px;
+        /* height: 500px!important; */
+        max-height: 500px;
+        /* background-color: #f2f2f2; */
+        background-color: black;
+        border: solid transparent 2px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+}
+
+
 
 /* board.html CSS */
 .card-deck {
