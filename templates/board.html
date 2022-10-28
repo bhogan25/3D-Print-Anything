@@ -19,14 +19,14 @@
             <a href="/entry?pk={{ file.post_key }}"><img src="static/img/{{ file.img_filename }}" class="thumbnail"></a>
               
           {% else -%} 
-            <a href="/entry?pk={{ file.post_key }}"><img src="static/img/default-no-image.png" class="thumbnails"></a>
+            <a href="/entry?pk={{ file.post_key }}"><img src="{{ defaultImage }}" class="thumbnails"></a>
       
           {% endif %}
 
           <div class="card-body">
             <h5 class="card-title">{{ file.title }}</h5>
             <p class="card-text">{{ file.desc }}</p>
-            <button class="btn btn-primary view" type="button"><a href="/entry?pk={{ file.post_key }}" class="card-link">View STL File </a></button>
+            <a href="/entry?pk={{ file.post_key }}" class="btn btn-primary view">View STL File</a>
           </div>
         </div>
 
@@ -36,7 +36,7 @@
 
 
   {% else -%}
-    <h1>Very empty... Need more posts...</h1> 
+    <h1>Very empty... Need more posts...</h1>
 
   {% endif %}
   

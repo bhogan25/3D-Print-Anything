@@ -27,7 +27,15 @@
 {% block main %}
     <div class="title-group">
         <div class="image-container">
-            <img src="static/img/{{ postData.img_filename }}">
+
+            {% if postData.img_filename %}
+                <img src="static/img/{{ postData.img_filename }}">
+              
+            {% else -%} 
+                <img src="{{ defaultImage }}">
+      
+            {% endif %}
+
         </div>
         <div class="title-data-container" >
             <h1>{{ postData.title }}</h1>
@@ -38,7 +46,8 @@
 
     <div class="data-render">
         <div class="table-container">
-            <table class="table">
+            <h3>Print Resources</h3>
+            <table class="table entry-table">
                 <tbody>
                   <tr>
                     <th scope="row">Material: </th>
@@ -57,7 +66,7 @@
                   </tr>
                   <tr>
                     <th scope="row">Note: </th>
-                    <td>{{ postData.note }}</td>
+                    <td class="note">{{ postData.note }}</td>
                 
                   </tr>
                   <tr>
@@ -67,7 +76,7 @@
                         {% if postData.stl_filename %}
                             <form method="post" action="/entry">
                                 <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.stl_filename }}">
-                                <button class="btn btn-primary download" type="submit"><span id="stl_filename">{{ postData.stl_filename }}</span></button>
+                                <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ postData.stl_filename }}</span></button>
                             </form>
                             
                         {% else -%}
@@ -82,7 +91,7 @@
                             <td>
                                 <form method="post" action="/entry">
                                     <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.gcode_filename }}">
-                                    <button class="btn btn-primary download" type="submit"><span>{{ postData.gcode_filename }}</span></button>
+                                    <button class="btn btn-primary download" type="submit"><span class="filename">{{ postData.gcode_filename }}</span></button>
                                 </form>
                             </td>
                     {% endif %}
@@ -141,7 +150,7 @@
             camera.aspect = window.innerWidth / window.innerHeight
             renderer.setPixelRatio( window.devicePixelRatio );
             renderer.setSize( window.innerWidth, window.innerHeight );
-            
+
         }
 
         // Create Axis helper
@@ -206,9 +215,6 @@
                 mesh.position.set( 0, - 0.37, - 0.6 );
                 mesh.rotation.set( - Math.PI / 2, 0, 0 );
                 mesh.scale.set( 0.5, 0.5, 0.5 ); // was ( 2, 2, 2 )
-
-                mesh.castShadow = true;
-                mesh.receiveShadow = true;
 
                 scene.add( mesh );
 

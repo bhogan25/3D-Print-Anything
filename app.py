@@ -6,7 +6,7 @@ from cs50 import SQL
 from flask import Flask, redirect, render_template, request, flash, send_file, url_for, send_from_directory
 from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
-from helpers import accepted_extension, convertToBinary, apology
+from helpers import accepted_extension, apology
 
 # Configure application
 app = Flask(__name__)
@@ -21,9 +21,14 @@ ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
 # OLD LOCATION: /mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/final_project/cs50-final-project/static/<final_location_here>
 # ONE DRIVE LOCATION: /mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project
 
-app.config["IMAGE_UPLOADS"] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/img"
 app.config['STL_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/stl"
+app.config["IMAGE_UPLOADS"] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/img"
 app.config['GCODE_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/gcode"
+pathList = [app.config['STL_UPLOADS'], app.config["IMAGE_UPLOADS"], app.config['GCODE_UPLOADS']]
+
+app.config['DEFAULT_IMAGE'] = "static/img/default-no-image.png"
+
+
 
 # Cashe Control
 @app.after_request
@@ -36,8 +41,10 @@ def after_request(response):
 
 
 @app.route("/", methods=["GET"])
-def home():
+def index():
     """1 - Home page for Blog"""
+     
+
 
     return render_template("index.html")
 
@@ -54,39 +61,38 @@ def board():
 
             elif extention in ALLOWED_IMAGE_EXTENSIONS:
                 path = app.config['IMAGE_UPLOADS']
-
-            elif extention == 'gcode':
-                path = app.config['GCODE_UPLOADS']
-                
-            else:
-                return apology("Unable to process request", 400)
   
             print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
             return send_from_directory(path, media, as_attachment=True)
 
     else: 
+        print('________________REQUEST________________')
+        print(request)
+        print('________________REQUEST.HEADER________________REQUEST')
+        print(request.headers)
+
         fileList = db.execute("SELECT title, desc, tstp, stl_filename, img_filename, gcode_filename, post_key FROM print_info")
-        if fileList:
-            print('Fetched files from database:')
-            print(fileList)
         
+        if fileList:
+            # print('Fetched files from database:')
+            # print(fileList)
+            print(f"defaultImage path = {app.config['DEFAULT_IMAGE']}")
         else:
             print("No Files were retreived from database")
         
-        return render_template("board.html", fileList=fileList)
+        return render_template("board.html", defaultImage=app.config['DEFAULT_IMAGE'], fileList=fileList)
     
 
 @app.route("/entry", methods=["GET", "POST"])
 def entry():
     """3 - Full page view containing all availible info on the the file being viewed"""
 
-    # Download a file from /entry
+    # Download a file from /entry page
     if request.method == "POST":
         try: 
             if request.form:
                 media = request.form.get('download')
                 extention = media.rsplit('.', 1)[1].lower()
-                print(extention)
 
                 if extention == 'stl':
                     path = app.config['STL_UPLOADS']
@@ -104,20 +110,20 @@ def entry():
             return apology("Client request bad", 400)
 
 
-    # View a post
+    # View a post from board
     else: 
         post_key = request.args.get('pk')
         print(F"FETCHING DATA FOR POST: {post_key}")
 
-        # try:
-        postDataList = db.execute("SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename FROM print_info WHERE post_key = ?", post_key)
-        postData = postDataList[0]
-        print('FETCHED DATA FROM DATABASE:')
-        print(postData)
-        return render_template("entry.html" , postData=postData)
+        try:
+            postDataList = db.execute("SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename FROM print_info WHERE post_key = ?", post_key)
+            postData = postDataList[0]
+            print('FETCHED DATA FROM DATABASE:')
+            print(postData)
+            return render_template("entry.html", defaultImage=app.config['DEFAULT_IMAGE'], postData=postData)
 
-        # except:
-        #     return apology("Unable to retreive data from database", 400) 
+        except:
+            return apology("Unable to retreive data from database", 400) 
    
  
 @app.route("/search", methods=["GET"])
@@ -134,42 +140,54 @@ def about():
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
-    """Page to test uploading files to project folder"""
+    """Page to control content uploaded to website"""
+
+    # Test Database connection and pull content
+    try: 
+        fileList = db.execute("SELECT title, desc, tstp, mtl, support, nzl, note, post_key, stl_filename, img_filename, gcode_filename FROM print_info")
+                    
+    except:
+        print("No Files were retreived from database")
+    
+    # On form Submission
     if request.method == "POST":
-        """1) Validate Form Data
-           2) Validate File Data"""
-        
 
-        if request.form:
-            """Check 1) [ON HOLD] - Form data name for each input are correct
-                     2) From values for each input are present"""
+        # Distinguish between UPLOAD FROM and DELETE FROM via requested content
+        if 'post_key' not in request.form:
+            '''UPLOAD FROM'''
 
-            # 1) DO (if users will be uploading files)
+            print("_______________request.form is printed below ___________________")
+            print(request.form)
+            
+            # Check for blank text input
+            if request.form.get("title") == '' or request.form.get('desc') == '':
+                return apology('Please fill out required text fields of the form', 400)
 
-            # 2)
-            for input in request.form:
-                if request.form[input] == "":
-                    return apology('Please complete all text fields of the form', 400)
-
-            # Assign form attributes
+            # Get form data and create tstp & post_key
             title = request.form.get('title')
             desc = request.form.get('desc')
             tstp = datetime.now()
+            mtl = request.form.get('mtl')
+ 
+            support = "None"
+            if request.form.get('support'):
+                support = 'Yes'
+
+            nzl = request.form.get('nzl')
+            note = request.form.get('note')
             post_key = token_hex(13)
 
             recieved_files = []
-
+ 
             if request.files:
                 """Check 1) [ON HOLD] Data names are correct
                         2) STL filename is present and has .stl extention
-                        3) File type for each file is is valid
+                        3) File ext for each file is is valid
                         4) Size of each file is acceptable"""
                 
                 # 1) DO (if users will be uploading files) - reject all and reload page if any form names are uknown, missmatched with filename extention, etc
                 
                 # 2) & 3)
-                
-
                 for file in request.files:
                     filename = request.files[file].filename
                     inputName = request.files[file].name
@@ -193,6 +211,7 @@ def admin():
 
                     else:
                         return redirect(url_for('admin'))
+
 
                     if filename != '':
                         if not accepted_extension(filename, ext):
@@ -219,7 +238,7 @@ def admin():
             # SAVE FORM DATA
             print("SAVING FORM DATA ---------------------------------------->")
             try:
-                db.execute(f"INSERT INTO print_info (title, desc, tstp, post_key) VALUES(?, ?, ?, ?)",title, desc, tstp, post_key)
+                db.execute(f"INSERT INTO print_info (title, desc, tstp, mtl, support, nzl, note, post_key) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", title, desc, tstp, mtl, support, nzl, note, post_key)
             
             except:
                 return apology('An error occured while saving form data to database', 400)
@@ -233,22 +252,43 @@ def admin():
                     
                     print(f"SAVING -- '{fileDict['filename']}' -- TO DATABASE")
                     db.execute(f"UPDATE print_info SET {fileDict['column']}='{fileDict['filename']}' WHERE post_key='{post_key}'")
-            
-            except:
-                # TODO Delete info from form submitted if all files cannot be submitted
-                db.execute(f"DELETE FROM print_info WHERE post_key='{post_key}'")
+
+                fileList = db.execute("SELECT title, desc, tstp, mtl, support, nzl, note, post_key, stl_filename, img_filename, gcode_filename FROM print_info")
+                return render_template('admin.html', fileList=fileList)
+
+            except: 
+                # Delete info from form submitted if all files cannot be submitted
+                fileList = delete(post_key)
                 return apology('An error occured while saving files to database', 400)
-        
+
         else:
-            return apology('No form data was submitted', 400)
+            '''DELETE FROM'''
+            post_key = request.form.get("post_key")
+            fileList = delete(post_key)
+            return render_template("admin.html", fileList=fileList)
 
-        return render_template("admin.html", recieved_files=recieved_files)
-    else: 
-        return render_template("admin.html")
+    else:
+        return render_template("admin.html", defaultImage=app.config["DEFAULT_IMAGE"], fileList=fileList)
 
+def delete(post_key):
+    '''Delete entry and refetch database data'''
+    try:
+        postFileRaw = db.execute(f"SELECT stl_filename, img_filename, gcode_filename FROM print_info WHERE post_key='{post_key}'")
+        postFilenames = list(postFileRaw[0].values())
+        print(postFilenames)
+        print(pathList)
+        
+        # Only execute this part if files are present in database (thus files present in static dirs)
+        postTuples = tuple(zip(pathList, postFilenames))
+        for item in postTuples: 
+            if item[1] != None:
+                print(f'Removing FILE {item[1]} from DIRECTORY {item[0]}')
+                path = os.path.join(item[0], item[1])
+                os.remove(path)
 
-# @app.route("/login", methods=["GET", "POST"])
+        db.execute(f"DELETE FROM print_info WHERE post_key='{post_key}'")
+        return db.execute("SELECT title, desc, tstp, mtl, support, nzl, note, post_key, stl_filename, img_filename, gcode_filename FROM print_info")
+        
+    except:
+        return apology("Unable to delete entry, please try again", 400)
 
-# @app.route("/logout")
-
-# @app.route("/register", methods=["GET", "POST"])

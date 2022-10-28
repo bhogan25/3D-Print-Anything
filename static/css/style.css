@@ -15,7 +15,9 @@ nav .navbar-brand
 
 }
 
+
 /* Colors for brand */
+
 .navbar-brand .blue
 {
     color: #537fbe;
@@ -33,6 +35,7 @@ nav .navbar-brand .green
     color: #2e944b;
 }
 
+
 /* entry.html CSS */
 
 .title-group {
@@ -43,10 +46,10 @@ nav .navbar-brand .green
 }
 
 .image-container img {
-    margin-top: 6px;
-    padding: 5px;
+    margin: 6px;
+    padding: 1px;
     width: 320px;
-    height: 220px;
+    height: 250px;
     object-fit: cover;
     object-position: 50% 50%;
     border: solid rgba(0,0,0,.125) 1px;
@@ -57,13 +60,11 @@ nav .navbar-brand .green
 .title-data-container {
     background-color: transparent;
     border-radius: 10px;
-    margin-top: 6px;
-    margin-left: 12px;
+    margin: 6px;
     padding: 15px;
     max-width: 600px;
     min-width: 150px;
     width: 600px;
-    min-height: 200px;
     text-align: left;
 }
 
@@ -72,6 +73,10 @@ nav .navbar-brand .green
     text-overflow: ellipsis;
 }
 
+.title-data-container p {
+    max-height: 135px;
+    overflow: auto;
+}
 
 .title-data-container small {
     white-space: nowrap;
@@ -89,50 +94,34 @@ nav .navbar-brand .green
 .table-container {
     margin: 6px 6px;
     padding: 5px;
-    max-width: 350px;
-    min-width: 250px;
+    width: 320px;
     height: auto;
     object-fit: cover;
     border: solid rgba(0,0,0,.125) 1px;
-    background-color: white;
-    border-radius: 10px; 
+    background-color: rgb(232, 232, 232);
+    border-radius: 10px;
 }
 
 .table {
-    background-color: white;
+    background-color: rgb(233, 233, 233);
     min-width: 250px;
     vertical-align: middle!important;
-    border-radius: 10px;
-    border-color: transparent;
     margin: 1px;
+    text-overflow: ellipsis;
 }
 
-
-@media only screen and (max-width: 957px) {
-    .table-container {
-        margin: 6px 6px;
-        padding: 5px;
-        max-width: 600px;
-        min-width: 250px;
-        height: auto;
-        object-fit: cover;
-        border: solid rgba(0,0,0,.125) 1px;
-        background-color: white;
-        border-radius: 10px; 
-    }
-    
-    .table {
-        background-color: white;
-        min-width: 250px;
-        vertical-align: middle!important;
-        border-radius: 10px;
-        border-color: transparent;
-        margin: 1px;
-    }
+.entry-table td {
+    text-overflow: ellipsis;
 }
 
-button.download span {
-    max-width: 150px;
+/* td.note {
+    max-height: 3em!important;
+    overflow: auto;
+    color: red;
+} */
+
+button.download {
+    max-width: 180px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -141,27 +130,24 @@ button.download span {
 .canvas-container {
     display: flex;
     justify-content: center;
-
 }
 
 canvas#renderView {
     margin: 6px 6px;
     max-width: 600px;
-    /* height: auto!important; */
     max-height: 350px;
     background-color: black;
     border: solid transparent 2px;
     border-radius: 10px;
     object-fit: cover;
+    resize: both;
 }
 
 @media only screen and (max-width: 600px) {
     canvas#renderView {
         margin: 6px 6px;
         max-width: 300px;
-        /* height: 500px!important; */
         max-height: 500px;
-        /* background-color: #f2f2f2; */
         background-color: black;
         border: solid transparent 2px;
         border-radius: 10px;
@@ -170,8 +156,8 @@ canvas#renderView {
 }
 
 
-
 /* board.html CSS */
+
 .card-deck {
     display: flex;
     flex-direction: row;
@@ -187,14 +173,9 @@ canvas#renderView {
     height: 325px;
   }
 
-/* .card a {
-    width: 100%;
-    border: solid green 1px;
-  } */
-
 .card img {
     margin-top: 6px;
-    padding: 5px;
+    padding: 1px;
     width: 200px;
     height: 130px;
     object-fit: cover;
@@ -219,12 +200,11 @@ canvas#renderView {
     max-height: 68px;
     overflow: hidden;
     line-height: 17px;
-    /* border: solid orange 1px; */
     text-align: left;
     font-size: small;
 }
 
-button.view {
+a.view {
     position: absolute;
     width: 200px;
     height: 40px;
@@ -236,4 +216,39 @@ button.view {
 button a.card-link {
     color: white;
     font-size: medium;
+}
+
+/* admin.html */
+.table-div {
+    font-size: smaller;
+}
+
+label.title {
+    text-align: left;
+}
+
+option {
+    text-align: center;
+}
+
+table.admin-table {
+    margin-top: 50px;
+     background-color: #f2f2f2;
+}
+
+td img.thumb {
+    margin-top: 6px;
+    padding: 5px;
+    width: 100px;
+    height: 65px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border: solid #f2f2f2 1px;
+    border-radius: 10px; 
+  }
+
+td.overflow-control {
+    white-space: nowrap;
+    overflow-x: scroll;
+    max-width: 100px;
 }

@@ -11,27 +11,116 @@
         <div class="mb-3">
             <div>
                 <label class="col-sm-2 col-form-label">Print Title: </label>
-                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Enter Text" type="text">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Enter Text" type="text" required>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-form-label">Description: </label>
-                <textarea class="form-control" rows="3" name="desc" style="max-width: 25%; margin-left: 37.5%;"></textarea>
+                <textarea class="form-control" rows="3" name="desc" style="max-width: 25%; margin-left: 37.5%;" required></textarea>
             </div>
             <div>
-                <label class="col-sm-2 col-form-label">STL File: </label>
-                <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="stl_1"  type="file">
+                <label class="title col-sm-2 col-form-label">Material: </label>
+                <select class="" name="mtl">
+                    <option selected="selected" value="none">---(select)---</option>
+                    <option value="PLA">PLA</option>
+                    <option value="PETG">PETG</option>
+                    <option value="TPU">TPU</option>
+                </select>
             </div>
             <div>
-                <label class="col-sm-2 col-form-label">Image File: </label>
+                <label class="title col-sm-2 col-form-label">Nozzle Size: </label>
+                <select class="" name="nzl">
+                    <option selected="selected" value="none">---(select)---</option>
+                    <option  value="0.4 mm">0.4 mm (standard)</option>
+                    <option value="0.3 mm">0.3 mm (fine)</option>
+                    <option value="0.6mm">0.6mm (course)</option>
+                </select>
+            </div>
+            <div>
+                <label class="title col-sm-2 col-form-label">Support Rq'd: </label>
+                <input type="checkbox" name="support" value="Yes">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-form-label">Note: </label>
+                <textarea class="form-control" rows="2" name="note" style="max-width: 25%; margin-left: 37.5%;"></textarea>
+            </div>
+            <div>
+                <label class="title col-sm-2 col-form-label">STL File: </label>
+                <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="stl_1"  type="file" required>
+            </div>
+            <div>
+                <label class="title col-sm-2 col-form-label">Image File: </label>
                 <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="img_1"  type="file">
             </div>
             <div>
-                <label class="col-sm-2 col-form-label">G-code File</label>
+                <label class="title col-sm-2 col-form-label">G-code File</label>
                 <input autocomplete="off" autofocus class="form-control-file mx-auto w-auto" name="gcode_1"  type="file">
             </div>
         </div>
-        <button class="btn btn-primary" type="submit"> Upload </button>
+        <input class="btn btn-primary" type="submit" value="Upload">
     </form>
 </div>
+
+<div class="table-div">
+    <table class="admin-table table">
+        <thead>
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Title</th>
+            <th scope="col">Desc</th>
+            <th scope="col">Tstp</th>
+            <th scope="col">Material</th>
+            <th scope="col">Noz</th>
+            <th scope="col">Support</th>
+            <th scope="col">Note</th>
+            <th scope="col">Post Key</th>
+            <th scope="col">STL File</th>
+            <th scope="col">IMG File</th>
+            <th scope="col">G-code File</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+    
+            {% for entry in fileList %}
+    
+                <tr class="admin">
+                    <td>
+                        <!-- <img class="thumb" src="static/img/{{ entry.img_filename }}"> -->
+
+                        {% if entry.img_filename %}
+                            <img src="static/img/{{ entry.img_filename }}" class="thumb">
+              
+                        {% else -%}
+                            <img src="{{ defaultImage }}" class="thumb">
+      
+                        {% endif %}
+
+
+                    </td>
+                    <td>{{ entry.title }}</td>
+                    <td class="overflow-control">{{ entry.desc }}</td>
+                    <td>{{ entry.tstp }}</td>
+                    <td>{{ entry.mtl }}</td>
+                    <td>{{ entry.nzl }}</td>
+                    <td>{{ entry.support }}</td>
+                    <td class="overflow-control">{{ entry.note }}</td>
+                    <td class="overflow-control">{{ entry.post_key }}</td>
+                    <td>{{ entry.stl_filename }}</td>
+                    <td>{{ entry.img_filename }}</td>
+                    <td>{{ entry.gcode_filename }}</td>
+                    <td>
+                        <form action="/admin" method="post">
+                            <input type="text" name="post_key" value="{{ entry.post_key }}" hidden>
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+    
+            {% endfor %} 
+    
+        </tbody>
+    </table>
+</div>
+   
 
 {% endblock %}
