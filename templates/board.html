@@ -6,13 +6,13 @@
 
 {% block main %}
 
-  {% if fileList %}
+  {% if boardQueryData %}
 
     
 
     <div class="card-deck">
 
-      {% for file in fileList %}
+      {% for file in boardQueryData %}
         <div class="card">
 
           {% if file.img_filename %}

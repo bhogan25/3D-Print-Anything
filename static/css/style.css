@@ -16,7 +16,7 @@ nav .navbar-brand
 }
 
 
-/* Colors for brand */
+/* Colors for Nav title */
 
 .navbar-brand .blue
 {
@@ -33,6 +33,19 @@ nav .navbar-brand .yellow
 nav .navbar-brand .green
 {
     color: #2e944b;
+}
+
+/* index.html */
+
+#background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    border: none;
+    pointer-events: none;
 }
 
 

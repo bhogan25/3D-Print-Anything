@@ -80,43 +80,47 @@
           </tr>
         </thead>
         <tbody>
-    
-            {% for entry in fileList %}
-    
-                <tr class="admin">
-                    <td>
-                        <!-- <img class="thumb" src="static/img/{{ entry.img_filename }}"> -->
 
-                        {% if entry.img_filename %}
-                            <img src="static/img/{{ entry.img_filename }}" class="thumb">
-              
-                        {% else -%}
-                            <img src="{{ defaultImage }}" class="thumb">
-      
-                        {% endif %}
+            {% if adminQueryData %}
+
+                {% for entry in adminQueryData %}
+        
+                    <tr class="admin">
+                        <td>
+                            <!-- <img class="thumb" src="static/img/{{ entry.img_filename }}"> -->
+
+                            {% if entry.img_filename %}
+                                <img src="static/img/{{ entry.img_filename }}" class="thumb">
+                
+                            {% else -%}
+                                <img src="{{ defaultImage }}" class="thumb">
+        
+                            {% endif %}
 
 
-                    </td>
-                    <td>{{ entry.title }}</td>
-                    <td class="overflow-control">{{ entry.desc }}</td>
-                    <td>{{ entry.tstp }}</td>
-                    <td>{{ entry.mtl }}</td>
-                    <td>{{ entry.nzl }}</td>
-                    <td>{{ entry.support }}</td>
-                    <td class="overflow-control">{{ entry.note }}</td>
-                    <td class="overflow-control">{{ entry.post_key }}</td>
-                    <td>{{ entry.stl_filename }}</td>
-                    <td>{{ entry.img_filename }}</td>
-                    <td>{{ entry.gcode_filename }}</td>
-                    <td>
-                        <form action="/admin" method="post">
-                            <input type="text" name="post_key" value="{{ entry.post_key }}" hidden>
-                            <input type="submit" value="Delete">
-                        </form>
-                    </td>
-                </tr>
-    
-            {% endfor %} 
+                        </td>
+                        <td>{{ entry.title }}</td>
+                        <td class="overflow-control">{{ entry.desc }}</td>
+                        <td>{{ entry.tstp }}</td>
+                        <td>{{ entry.mtl }}</td>
+                        <td>{{ entry.nzl }}</td>
+                        <td>{{ entry.support }}</td>
+                        <td class="overflow-control">{{ entry.note }}</td>
+                        <td class="overflow-control">{{ entry.post_key }}</td>
+                        <td>{{ entry.stl_filename }}</td>
+                        <td>{{ entry.img_filename }}</td>
+                        <td>{{ entry.gcode_filename }}</td>
+                        <td>
+                            <form action="/admin" method="post">
+                                <input type="text" name="post_key" value="{{ entry.post_key }}" hidden>
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+        
+                {% endfor %}
+
+            {% endif %}
     
         </tbody>
     </table>

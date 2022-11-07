@@ -7,7 +7,7 @@
 {% block main %}
 <!-- A form containing search boxes that are linked to other sites search boxes like: [thingiverse, thangs, cults3D, free3D, myminifactory, etc] -->
 
-<div>
+<!-- <div>
     <form action="https://www.thingiverse.com/search" target="_blank" rel="noopener noreferrer">
         <div class="form-cont">
             <div class="form-cont-params">
@@ -18,12 +18,62 @@
                 <input type="hidden" name="catagory_id" value="0">
             </div>
             <div class="form-cont-btn">
-                <input type="submit" value="Search ___ website">
+                <input type="submit" value="Search Thingiverse">
             </div>
         </div>
     </form>
+</div> -->
 
-</div>
 
+<form action="https://cults3d.com/en/search" target="_blank" rel="noopener noreferrer">
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Cult :</label>
+      <div class="col-sm-10">
+        <input type="text" name="q" class="form-control" placeholder="Klein Bottle">
+      </div>
+      <div class="col-sm-10">
+        <input type="submit" value="Search Cult.com">
+    </div>
+</form>
+
+<form action="https://www.thingiverse.com/search" target="_blank" rel="noopener noreferrer">
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Thingiverse: </label>
+      <div class="col-sm-10">
+        <input type="text" name="q" class="form-control" placeholder="Gears">
+        <input type="hidden" name="page" value="1">
+        <input type="hidden" name="type" value="thing">
+        <input type="hidden" name="sort" value="popular">
+        <input type="hidden" name="catagory_id" value="0">
+      </div>
+    </div>
+    <div class="col-sm-10">
+        <input type="submit" value="Search Thingiverse.com">
+    </div>
+</form>
+
+<form action="https://pinshape.com/search/designs" target="_blank" rel="noopener noreferrer">
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Pinshape: </label>
+      <div class="col-sm-10">
+        <input type="text" name="q" class="form-control" placeholder="Gyroscope">
+      </div>
+    </div>
+    <div class="col-sm-10">
+        <input type="submit" value="Search Pinshape.com">
+    </div>
+</form>
+
+<form action="https://free3d.com/3d-models/" target="_blank" rel="noopener noreferrer">
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Free3D: </label>
+      <div class="col-sm-10">
+        <input type="text" name="q" class="form-control" placeholder="Caribeaner">
+      </div>
+    </div>
+    <div class="col-sm-10">
+        <input type="submit" value="Search Free3D.com">
+    </div>
+</form>
 
 {% endblock %}

@@ -19,7 +19,7 @@
 
 {% block title %}
 
-        {{ postData.title }}
+        {{ entryData.title }}
 
 {% endblock %}
 
@@ -28,8 +28,8 @@
     <div class="title-group">
         <div class="image-container">
 
-            {% if postData.img_filename %}
-                <img src="static/img/{{ postData.img_filename }}">
+            {% if entryData.img_filename %}
+                <img src="static/img/{{ entryData.img_filename }}">
               
             {% else -%} 
                 <img src="{{ defaultImage }}">
@@ -38,9 +38,9 @@
 
         </div>
         <div class="title-data-container" >
-            <h1>{{ postData.title }}</h1>
-            <p>{{ postData.desc }}</p>
-            <small class="text-muted">Posted {{ postData.tstp }}</small>
+            <h1>{{ entryData.title }}</h1>
+            <p>{{ entryData.desc }}</p>
+            <small class="text-muted">Posted {{ entryData.tstp }}</small>
         </div>
     </div>
 
@@ -51,32 +51,32 @@
                 <tbody>
                   <tr>
                     <th scope="row">Material: </th>
-                    <td>{{ postData.mtl }}</td>
+                    <td>{{ entryData.mtl }}</td>
               
                   </tr>
                   <tr>
                     <th scope="row">Nozzle: </th>
-                    <td>{{ postData.nzl }}</td>
+                    <td>{{ entryData.nzl }}</td>
                
                   </tr>
                   <tr>
                     <th scope="row">Support: </th>
-                    <td>{{ postData.support }}</td>
+                    <td>{{ entryData.support }}</td>
               
                   </tr>
                   <tr>
                     <th scope="row">Note: </th>
-                    <td class="note">{{ postData.note }}</td>
+                    <td class="note">{{ entryData.note }}</td>
                 
                   </tr>
                   <tr>
                     <th scope="row">STL File: </th>
                     <td>
             
-                        {% if postData.stl_filename %}
+                        {% if entryData.stl_filename %}
                             <form method="post" action="/entry">
-                                <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.stl_filename }}">
-                                <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ postData.stl_filename }}</span></button>
+                                <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.stl_filename }}">
+                                <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ entryData.stl_filename }}</span></button>
                             </form>
                             
                         {% else -%}
@@ -85,13 +85,13 @@
                         {% endif %}
                     </td>
         
-                    {% if postData.gcode_filename %}
+                    {% if entryData.gcode_filename %}
                         <tr>
                             <th scope="row">G-Code: </th>
                             <td>
                                 <form method="post" action="/entry">
-                                    <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ postData.gcode_filename }}">
-                                    <button class="btn btn-primary download" type="submit"><span class="filename">{{ postData.gcode_filename }}</span></button>
+                                    <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.gcode_filename }}">
+                                    <button class="btn btn-primary download" type="submit"><span class="filename">{{ entryData.gcode_filename }}</span></button>
                                 </form>
                             </td>
                     {% endif %}
@@ -113,8 +113,6 @@
         import * as THREE from 'three';
         import { STLLoader } from 'STLLoader';
         import { OrbitControls } from 'OrbitControls';
-
-        // Retrieve filename from query param or set to defualt
 
         // let params = new URLSearchParams(document.location.search);
         let filePath = '../static/stl/';
