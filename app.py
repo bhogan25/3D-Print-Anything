@@ -4,7 +4,7 @@ from secrets import token_hex
 from datetime import datetime
 from cs50 import SQL
 from flask import Flask, redirect, render_template, request, url_for, send_from_directory
-from werkzeug.wrappers import Response
+# from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
 from helpers import accepted_extension, apology
 
@@ -181,7 +181,7 @@ def admin():
                          3) File ext for each file is is valid
                     """
                 for file in request.files:
-                    filename = request.files[file].filename
+                    filename = secure_filename(request.files[file].filename)
                     inputName = request.files[file].name
 
                     # ENSURE STL FILE IS NOT ABSENT
