@@ -3,7 +3,7 @@ import os
 from secrets import token_hex
 from datetime import datetime
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, flash, send_file, url_for, send_from_directory
+from flask import Flask, redirect, render_template, request, url_for, send_from_directory
 from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
 from helpers import accepted_extension, apology
@@ -12,21 +12,19 @@ from helpers import accepted_extension, apology
 app = Flask(__name__)
 
 # Configure SQLite database
-db = SQL("sqlite:///3d.db")
+db = SQL("sqlite:///3d_full.db")
 
 # Establish allowed img extentions
 ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
 
 # Configure Upload Paths
-# OLD LOCATION: /mnt/c/users/Ben Hogan/documents/CS 2022/CS50 - Harvard/Projects/final_project/cs50-final-project/static/<final_location_here>
-# ONE DRIVE LOCATION: /mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project
+MAIN_PATH = str(os.getcwd())
 
-app.config['STL_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/stl"
-app.config["IMAGE_UPLOADS"] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/img"
-app.config['GCODE_UPLOADS'] = "/mnt/c/Users/Ben Hogan/OneDrive/Documents/CS 2022/CS50 - Harvard/Projects/Final_Project/cs50-final-project/static/gcode"
+app.config['STL_UPLOADS'] = MAIN_PATH + "/static/stl"
+app.config["IMAGE_UPLOADS"] = MAIN_PATH + "/static/img"
+app.config['GCODE_UPLOADS'] = MAIN_PATH + "/static/gcode"
 pathList = [app.config['STL_UPLOADS'], app.config["IMAGE_UPLOADS"], app.config['GCODE_UPLOADS']]
-
-app.config['DEFAULT_IMAGE'] = "static/img/default-no-image.png"
+app.config['DEFAULT_IMAGE'] = "static/0perm-media/default-no-image.png"
 
 # Cashe Control
 @app.after_request
@@ -117,7 +115,7 @@ def entry():
                     return apology("Client request for files not allowed", 400)
 
             # SEND FILE {MEDIA} FROM {PATH} TO CLIENT AS ATTACHMENT
-            print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
+            print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED FROM ---{path}---')
             return send_from_directory(path, media, as_attachment=True)
         
         except:
@@ -222,11 +220,6 @@ def admin():
                                 }
                             recieved_files.append(dict)
                     
-                    # else:
-                    #     # FILENAME SUBMITTED WAS BLANK
-                    #     print(f"Filename is: [{filename}]")
-                    #     return apology('Error saving file, please try again', 400)
-
             else:
                 # NO FILES RECEIVED FROM CLIENT
                 return apology('No files were submitted', 400)

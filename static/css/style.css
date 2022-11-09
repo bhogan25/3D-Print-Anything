@@ -3,8 +3,8 @@ html {
 }
 
 body {
-   background-color: #f2f2f2; 
-   font-family: Helvetica, Arial, sans-serif;
+   background-color: #f1f1f1;
+   /* font-family: Helvetica, Arial, sans-serif; */
 }
 
 nav .navbar-brand
@@ -158,13 +158,12 @@ canvas#renderView {
 
 .card img {
     margin-top: 6px;
-    padding: 1px;
     width: 200px;
     height: 130px;
     object-fit: cover;
     object-position: 50% 50%;
     border: solid #f2f2f2 1px;
-    border-radius: 10px; 
+    border-radius: 10px;
   }
 
 .card-body {
