@@ -5,75 +5,70 @@
 {% endblock %}
 
 {% block main %}
-<!-- A form containing search boxes that are linked to other sites search boxes like: [thingiverse, thangs, cults3D, free3D, myminifactory, etc] -->
+<!-- A form containing search boxes that are linked to other sites search boxes like: [/thingiverse, /pinshape, /cults3D, /free3D, thangs, /myminifactory, etc] -->
 
-<!-- <div>
-    <form action="https://www.thingiverse.com/search" target="_blank" rel="noopener noreferrer">
-        <div class="form-cont">
-            <div class="form-cont-params">
-                <input type="text" name="q" spellcheck="false" autocomplete="off">
-                <input type="hidden" name="page" value="1">
-                <input type="hidden" name="type" value="thing">
-                <input type="hidden" name="sort" value="popular">
-                <input type="hidden" name="catagory_id" value="0">
-            </div>
-            <div class="form-cont-btn">
-                <input type="submit" value="Search Thingiverse">
-            </div>
-        </div>
-    </form>
-</div> -->
+<div class="row">
+  <div class="col-lg-4"></div>
+  <div class="col-lg-4">
+    <h1 class="mt-4 mb-5">Search Other Sites for 3D files</h1>
 
-
-<form action="https://cults3d.com/en/search" target="_blank" rel="noopener noreferrer">
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Cult :</label>
-      <div class="col-sm-10">
-        <input type="text" name="q" class="form-control" placeholder="Klein Bottle">
-      </div>
-      <div class="col-sm-10">
-        <input type="submit" value="Search Cult.com">
-    </div>
-</form>
-
-<form action="https://www.thingiverse.com/search" target="_blank" rel="noopener noreferrer">
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Thingiverse: </label>
-      <div class="col-sm-10">
-        <input type="text" name="q" class="form-control" placeholder="Gears">
+    <!-- ------------------------- Thingiverse ------------------------- -->
+    <div class="row">
+      <form action="https://www.thingiverse.com/search" class="d-flex mb-2" target="_blank" rel="noopener noreferrer">
+        <img class="me-2" src="https://cdn.thingiverse.com/site/img/favicons/apple-touch-icon-57x57.png" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">Thingiverse: </label>
+        <input type="text" name="q" class="form-control me-2" placeholder="Klein Bottle" autocomplete="off">
         <input type="hidden" name="page" value="1">
         <input type="hidden" name="type" value="thing">
         <input type="hidden" name="sort" value="popular">
         <input type="hidden" name="catagory_id" value="0">
-      </div>
+        <button class="btn btn-outline-primary col-sm-2" type="submit">Search</button>
+      </form>
     </div>
-    <div class="col-sm-10">
-        <input type="submit" value="Search Thingiverse.com">
-    </div>
-</form>
 
-<form action="https://pinshape.com/search/designs" target="_blank" rel="noopener noreferrer">
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Pinshape: </label>
-      <div class="col-sm-10">
-        <input type="text" name="q" class="form-control" placeholder="Gyroscope">
-      </div>
+    <!-- ------------------------- CULTS3D ------------------------- -->
+    <div class="row">
+      <form action="https://cults3d.com/en/search" class="d-flex mb-2" target="_blank" rel="noopener noreferrer">
+        <img class="me-2" src="https://assets.cults3d.com/assets/favicons/cults-e19f0b01f785a57ca7e0a5aeb5b365ea8255e2d52389045f7049e470499130b4.ico" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">Cults3D: </label>
+        <input type="text" name="q" class="form-control me-2" placeholder="Gyroscope" autocomplete="off">
+        <button class="btn btn-outline-danger col-sm-2" type="submit">Search</button>
+      </form>
     </div>
-    <div class="col-sm-10">
-        <input type="submit" value="Search Pinshape.com">
-    </div>
-</form>
 
-<form action="https://free3d.com/3d-models/" target="_blank" rel="noopener noreferrer">
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Free3D: </label>
-      <div class="col-sm-10">
-        <input type="text" name="q" class="form-control" placeholder="Caribeaner">
-      </div>
+    <!-- ------------------------- Free3D ------------------------- -->
+    <div class="row">
+      <form action="https://free3d.com/3d-models" class="d-flex mb-2" target="_blank" rel="noopener noreferrer">
+        <img class="border me-2" src="https://imgs.search.brave.com/Hd17WCLe4TdBmGnyuC3_oAGViLDe3y_YBkmFQGYRE2M/rs:fit:32:32:1/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvYjMzNzdkM2Vk/NTkxZTdhN2M0NDll/ZjA4NDg2MmY3Zjgw/OTBhZTMxN2Q0MmY4/YTA1ZDAwNzRiOTFl/YjZiNzA0Yi9mcmVl/M2QuY29tLw" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">Free3D: </label>
+        <input type="text" name="q" class="form-control me-2" placeholder="Airplane" autocomplete="off">
+        <button class="btn btn-outline-warning col-sm-2" type="submit">Search</button>
+      </form>
     </div>
-    <div class="col-sm-10">
-        <input type="submit" value="Search Free3D.com">
+
+    <!-- ------------------------- MyMiniFactory ------------------------- -->
+    <div class="row">
+      <form action="https://www.myminifactory.com/search" class="d-flex mb-2" target="_blank" rel="noopener noreferrer">
+        <img class="border me-2" src="https://static.myminifactory.com/images/app-banner/app-icon.png?v147" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">MyMiniFactory: </label>
+        <input type="text" name="query" class="form-control me-2" placeholder="Screw" autocomplete="off">
+        <input type="text" name="store" hidden value="0">
+        <button class="btn btn-outline-success col-sm-2" type="submit">Search</button>
+      </form>
     </div>
-</form>
+    
+    <!-- ------------------------- Pinshape ------------------------- -->
+    <div class="row">
+      <form action="https://pinshape.com/search/designs" class="d-flex mb-2" target="_blank" rel="noopener noreferrer">
+        <img class="border me-2" src="https://imgs.search.brave.com/7dvgU4MBNIxR-FWnoWUHJUzrHaEJnjIQ9yuTbqvScl0/rs:fit:960:960:1/g:ce/aHR0cHM6Ly8zZHBy/aW50LmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAxNS8wMy9w/aW5zaGFwZS1sb2dv/LnBuZw" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">Pinshape: </label>
+        <input type="text" name="q" class="form-control me-2" placeholder="Gears" autocomplete="off">
+        <button class="btn btn-outline-info col-sm-2" type="submit">Search</button>
+      </form>
+    </div>
+
+  </div>
+  <div class="col-lg-4"></div>
+</div>
 
 {% endblock %}
