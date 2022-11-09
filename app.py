@@ -62,7 +62,7 @@ def index():
     return render_template("index.html", defaultImage=app.config['DEFAULT_IMAGE'], recentsQueryData=recentsQueryData)
 
 
-@app.route("/board", methods = ["GET", "POST"])
+@app.route("/board", methods = ["GET"])
 def board():
     """Post Board of all files posted"""
     if request.method == "GET":
@@ -77,22 +77,6 @@ def board():
             print("UNABLE TO EXECUTE boardQuery")
 
         return render_template("board.html", defaultImage=app.config['DEFAULT_IMAGE'], boardQueryData=boardQueryData)
-
-    if request.method == "POST":
-        # DOWNLOAD FILE FROM /BOARD
-        if request.form:
-            media = request.form.get('download')
-            extention = media.rsplit('.', 1)[1].lower()
-
-            if extention == 'stl':
-                path = app.config['STL_UPLOADS']
-
-            elif extention in ALLOWED_IMAGE_EXTENSIONS:
-                path = app.config['IMAGE_UPLOADS']
-
-            # SEND FILE {MEDIA} FROM {PATH} TO CLIENT AS ATTACHMENT
-            print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED')
-            return send_from_directory(path, media, as_attachment=True)
 
 
 @app.route("/entry", methods=["GET", "POST"])
@@ -139,8 +123,6 @@ def entry():
         except:
             # UNABLE TO SEND FILE TO CLIENT FOR DOWNLOAD
             return apology("Client request bad", 400)
-
-    
    
  
 @app.route("/search", methods=["GET"])
@@ -149,11 +131,13 @@ def search():
 
     return render_template("search.html")
 
+
 @app.route("/about", methods=["GET", "POST"])
 def about():
     """Tell about the website and offer some education resources"""
 
     return render_template("about.html")
+
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -300,10 +284,15 @@ def deleteAndRefresh(argQuery, post_key):
         pathFilePair = tuple(zip(pathList, filenames))
         for item in pathFilePair:
             if item[1] != None:
-                print(f'Removing FILE {item[1]} from DIRECTORY {item[0]}')
-                path = os.path.join(item[0], item[1])
-                os.remove(path)
+                try:
+                    print(f'Removing FILE {item[1]} from DIRECTORY {item[0]}')
+                    path = os.path.join(item[0], item[1])
+                    os.remove(path)
 
+                except:
+                    print(f"{item[1].upper()} NOT FOUND IN EXPECTED DIRECTORY")
+
+        print(f'Removing ENTRY {post_key} from DATABASE')
         db.execute(f"DELETE \
                     FROM print_info \
                     WHERE post_key='{post_key}'")

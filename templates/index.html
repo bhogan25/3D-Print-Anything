@@ -1,16 +1,6 @@
 {% extends "layout.html" %}
 
-{% block head %}
-
-<script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.144.0/build/three.module.js",
-        }
-    }
-</script>
-
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block title %} 
     Home
@@ -19,10 +9,10 @@
 {% block main %}
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
+        <div class="col-lg-7 col-md-8 mx-auto">
           <h1 class="fw-light">Welcome to my Blog</h1>
           <p class="lead text-muted">
-            For the past couple of years I've been tinkering with my Ender 3 printer and making wierd models in Onshape and I wanted a place to organize all my files.  I also happened to need an idea for my final project for a computer science course, which lead to the creation of this blog.  Its nothing fancy, mostly a project where I could test my skills at creating and implementing something unique, applicable to me and my interests, and utilizing technology with which I was not completely familiar with at the time. I have thoroughly enjoyed the process of creating it and maybe one day, with a lot more work, I'll launch it for everyone to use and enjoy.  Until then...</p>
+            For the past couple of years I've been tinkering with my Ender 3 printer and making wierd models in Onshape and I wanted a place to organize all my files.  I also happened to need an idea for my final project for a computer science course, which lead to the creation of this blog.  Its nothing fancy, mostly a project where I could test my skills at creating and implementing something unique, applicable to me and my interests, and utilizing technology with which I was not completely familiar with at the time. I have thoroughly enjoyed the process of creating it and maybe one day, with a lot more work, I'll launch it for everyone to use and enjoy.</p>
           <p>
             <a href="/board" class="btn btn-primary my-2">View All Prints</a>
             <a href="/about" class="btn btn-secondary my-2">About</a>
@@ -32,9 +22,7 @@
     </section>
   
     <div class="album py-5 bg-light">
-        <h2>
-            Recent Posts
-        </h2>
+        <h1 class="mb-4">Recent Posts<h1>
       <div class="container">
   
         {% if recentsQueryData %}
@@ -55,7 +43,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ post.title }}</h5>
                             <p class="card-text">{{ post.desc }}</p>
-                            <a href="/entry?pk={{ post.post_key }}" class="btn btn-primary view">View STL File</a>
+                            <a href="/entry?pk={{ post.post_key }}" class="btn btn-primary view">View File</a>
                         </div>
                     </div>
 
