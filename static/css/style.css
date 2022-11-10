@@ -4,7 +4,6 @@ html {
 
 body {
    background-color: #f1f1f1;
-   /* font-family: Helvetica, Arial, sans-serif; */
 }
 
 nav .navbar-brand
@@ -24,6 +23,10 @@ div.album {
     border-radius: 10px;
 }
 
+.index-card img {
+    background-color: white;
+    padding: 0px;
+}
 
 /* entry.html CSS */
 
@@ -87,16 +90,15 @@ div.album {
     height: auto;
     object-fit: cover;
     border: solid rgba(0,0,0,.125) 1px;
-    background-color: rgb(232, 232, 232);
+    background-color: #212529;
     border-radius: 10px;
 }
 
 .table {
-    background-color: rgb(233, 233, 233);
+    background-color: transparent;
     min-width: 250px;
-    vertical-align: middle!important;
     margin: 1px;
-    text-overflow: ellipsis;
+    text-overflow: auto;
 }
 
 .entry-table td {
@@ -200,6 +202,45 @@ button a.card-link {
     font-size: medium;
 }
 
+
+/* search.html */
+
+.search-card {
+    border-radius: 10px;
+    height: 84px;
+}
+
+/* form img.border {
+    border: solid #f2f2f2 1px;
+    border-radius: 10px;
+} */
+
+/* .result-btn {
+    max-width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+} */
+
+.btn-box {
+    position: relative;
+}
+
+a.result-title {
+    color: white;
+    font-size: medium;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: absolute;
+    width: 165px;
+    height: 40px;
+    bottom: -19px;
+    left: 30%;
+    margin-left: -65px;
+}
+
+
 /* admin.html */
 
 .table-div {
@@ -208,31 +249,27 @@ button a.card-link {
 
 table.admin-table {
     margin-top: 50px;
-    background-color: #f2f2f2;
+    background-color: transparent;
     border-color: black;
     border-radius: 10px;
 }
 
-td img.thumb {
+img.thumb {
     margin-top: 6px;
-    /* padding: 5px; */
     width: 100px;
     height: 65px;
     object-fit: cover;
     object-position: 50% 50%;
-    border: darkgray 1px;
+    border: solid #f2f2f2 1px;
     border-radius: 10px; 
   }
+
+table.admin-table td {
+    vertical-align: middle;
+}
 
 td.overflow-control {
     white-space: nowrap;
     overflow-x: scroll;
     max-width: 100px;
-}
-
-/* Search.html */
-
-form img.border {
-    border: solid white 2px;
-    border-radius: 10px;
 }

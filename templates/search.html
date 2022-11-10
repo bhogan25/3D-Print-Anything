@@ -10,7 +10,58 @@
 <div class="row">
   <div class="col-lg-3"></div>
   <div class="col-lg-6">
-    <h1 class="mt-4 mb-5">Search Other Sites for 3D files</h1>
+
+    <!-- ------------------------- 3D Print Anything ------------------------- -->
+    <div class="row my-4">
+      <form action="/search" class="d-flex mb-2" method="post">
+        <img class="me-2" src="/static/0perm-media/3DPA_LOGO__DARK.png" class="me-2" width="40" height="40">
+        <label class="col-sm-3 me-2 col-form-label text-start">3DPA</label>
+        <input type="text" name="q" class="form-control me-2" placeholder="Benchy" autocomplete="off">
+        <button class="btn btn-dark col-sm-2" type="submit">Search</button>
+      </form>
+    </div>
+
+    {% if searchQueryData == None %}
+      <div class="search-results">Sorry, no entries were found for your search :(</div>
+
+    {% else -%}
+
+    
+      <p class="text-muted my-1">Results</p>
+      <div class="row flex-wrap jusify-content-center">
+        <div class="col-lg-2"></div>
+
+        <div class="col-lg-8">
+          {% for entry in searchQueryData %}
+            <div class="row m-2 py-1 bg-white align-items-center search-card">
+              
+              <div class="col-lg-6 align-items-center img-box">
+                
+                {% if entry.img_filename %}
+                  <img src="static/img/{{ entry.img_filename }}" class="thumb" style="margin-top: 0px">
+                
+                {% else -%}
+                  <img src="{{ defaultImage }}" class="thumb" style="margin-top: 0px">
+                
+                {% endif %}
+              </div>
+              
+              <div class="col-lg-6 btn-box">
+                  <a class="result-title btn btn-primary" href="/entry?pk={{ entry.post_key }}">{{ entry.title }}</a>
+              </div>
+              
+            </div>
+          
+          {% endfor %}
+        </div>
+
+        <div class="col-lg-2"></div>
+
+      </div>
+
+    {% endif %}
+
+    <h1 class="my-5 fw-light">Search Other Sites for 3D files</h1>
 
     <!-- ------------------------- Thingiverse ------------------------- -->
     <div class="row">

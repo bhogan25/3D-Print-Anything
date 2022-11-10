@@ -6,15 +6,26 @@
 
 {% block main %}
     <main role="main" class="container">
-        <div class="jumbotron">
-        <h1 class="fw-light">About the Project</h1>
-        <p class="lead">Allow me to introduce myself, my name is Ben Hogan and this is my final project for CS50x.  
-                            The goal for this project was to challenge myself and create something that was unique
-                            to my interests while integrating the skills I leaned through CS50x.  I have thoroughly 
-                            enjoyed the process of this app as well as cursed it at times.  Hopefully this will be
-                            only the first of many projects of this kind that I will be creating as my transition 
-                            to web development ensues.</p>
-        <a class="btn btn-lg btn-primary" href="https://github.com/bhogan25/cs50-final-project" role="button">View Source Code &raquo;</a>
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <img class="rounded-circle m-2" src="https://imgs.search.brave.com/UQjSa_Yd8ARa4E-c35EAXu2-m51_OLesxLd0nAQcTNU/rs:fit:1001:1001:1/g:ce/aHR0cHM6Ly9zeXJh/Y3VzZTNkcHJpbnRp/bmcuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzA1L2Vu/ZGVyLTMtcHJvXzFf/MTAyNHgxMDI0Lmpw/Zw" alt="Ender3 Printer" width="140" height="140">
+                <h1 class="fw-light">About the Project</h1>
+                <p class="lead">
+                    Allow me to introduce myself, my name is Ben Hogan and this is my final project for CS50x.  
+                    The goal for this project was to challenge myself and create something that was unique
+                    to my interests while integrating the skills I leaned through CS50x.  I love 3D printing 
+                    because it gives anyone with the desire to learn a way to design and create tangible things 
+                    that would otherwise cost thousands of dollars and years of training to produce.  I use an 
+                    Ender3 Pro FDM printer (picture above) and Unimaker's Cura for slicing software.  For models 
+                    I use the sites listed on the search page, and for designing my own modesl I use 
+                    <a href="https://www.onshape.com/en/">Onshape</a>. All of which are free.  Hopefully this 
+                    will be only the first of many projects of this kind that I will be creating as my transition 
+                    to web development ensues.
+                </p>
+                <a class="btn btn-lg btn-primary" href="https://github.com/bhogan25/cs50-final-project" role="button">View Source Code &raquo;</a>
+                </div>
+            <div class="col-lg-3"></div>
         </div>
     </main>
 {% endblock %}

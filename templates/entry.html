@@ -37,67 +37,81 @@
             {% endif %}
 
         </div>
-        <div class="title-data-container" >
-            <h1>{{ entryData.title }}</h1>
-            <p>{{ entryData.desc }}</p>
+        <div class="title-data-container">
+            <h1 class="fw-light">{{ entryData.title }}</h1>
+            <p class="lead text-muted">{{ entryData.desc }}</p>
             <small class="text-muted">Posted {{ entryData.tstp }}</small>
         </div>
     </div>
 
     <div class="data-render">
         <div class="table-container">
-            <h3>Print Resources</h3>
-            <table class="table entry-table">
-                <tbody>
-                  <tr>
-                    <th scope="row">Material: </th>
-                    <td>{{ entryData.mtl }}</td>
-              
-                  </tr>
-                  <tr>
-                    <th scope="row">Nozzle: </th>
-                    <td>{{ entryData.nzl }}</td>
-               
-                  </tr>
-                  <tr>
-                    <th scope="row">Support: </th>
-                    <td>{{ entryData.support }}</td>
-              
-                  </tr>
-                  <tr>
-                    <th scope="row">Note: </th>
-                    <td class="note">{{ entryData.note }}</td>
-                
-                  </tr>
-                  <tr>
-                    <th scope="row">STL File: </th>
-                    <td>
-            
-                        {% if entryData.stl_filename %}
-                            <form method="post" action="/entry">
-                                <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.stl_filename }}">
-                                <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ entryData.stl_filename }}</span></button>
-                            </form>
-                            
-                        {% else -%}
-                            <span id="stl_filename" hidden>default-no-stl.stl</span>
-                            
-                        {% endif %}
-                    </td>
-        
-                    {% if entryData.gcode_filename %}
+            <div>
+                <h3 class="my-3 fw-light fs-2 text-white"> Print Info </h3>
+            </div>
+            <div class="d-flex align-items-center">
+                <table class="table table-dark table-borderless table-hover entry-table">
+                    <tbody>
                         <tr>
-                            <th scope="row">G-Code: </th>
-                            <td>
-                                <form method="post" action="/entry">
-                                    <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.gcode_filename }}">
-                                    <button class="btn btn-primary download" type="submit"><span class="filename">{{ entryData.gcode_filename }}</span></button>
-                                </form>
+                            <th scope="row">Material: </th>
+                            <td>{{ entryData.mtl }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nozzle: </th>
+                            <td>{{ entryData.nzl }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Support: </th>
+                            <td>{{ entryData.support }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Note: </th>
+                            <td class="note">
+
+                                {% if entryData.note %}
+                                    {{ entryData.note }}
+
+                                {% else -%}
+                                    None
+                                {% endif %}
+
                             </td>
-                    {% endif %}
-                  </tr>
-                </tbody>
-              </table>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="align-middle">STL File: </th>
+                            <td>
+                    
+                                {% if entryData.stl_filename %}
+                                    <form method="post" action="/entry">
+                                        <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.stl_filename }}">
+                                        <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ entryData.stl_filename }}</span></button>
+                                    </form>
+                                    
+                                {% else -%}
+                                    <span id="stl_filename" hidden>default-no-stl.stl</span>
+                                    
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="align-middle">G-Code: </th>
+                            <td>
+
+                                {% if entryData.gcode_filename %}
+                                    <form method="post" action="/entry">
+                                        <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.gcode_filename }}">
+                                        <button class="btn btn-primary download" type="submit"><span class="filename">{{ entryData.gcode_filename }}</span></button>
+                                    </form>
+                                
+                                {% else -%}
+                                    None
+                                
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                  </table>
+            </div>
         </div>
         <div class="canvas-container">
             <canvas id="renderView"></canvas>

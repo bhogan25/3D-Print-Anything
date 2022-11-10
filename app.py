@@ -123,11 +123,25 @@ def entry():
             return apology("Client request bad", 400)
    
  
-@app.route("/search", methods=["GET"])
+@app.route("/search", methods=["GET", "POST"])
 def search():
-    """Search other 3D printing sites for files"""
+    """Search 3DPA and other 3D printing sites for files"""
+    if request.method == "GET":
+        return render_template("search.html")
 
-    return render_template("search.html")
+    # SEND SEARCH RESULTS
+    if request.method == "POST":
+        searchQueryData = None
+        q = request.form.get('q')
+        if q != '':
+            searchQuery = """SELECT title, img_filename, post_key 
+                            FROM print_info
+                            WHERE title LIKE ? 
+                            """
+            searchQueryData = db.execute(searchQuery, "%" + q + "%")
+            print(searchQueryData)
+
+        return render_template("search.html", defaultImage=app.config["DEFAULT_IMAGE"], searchQueryData=searchQueryData)
 
 
 @app.route("/about", methods=["GET", "POST"])
@@ -266,11 +280,11 @@ def admin():
 def deleteAndRefresh(argQuery, post_key):
     '''Delete entry and return updated data'''
     try:
-        filenameQuery = f"""SELECT stl_filename, img_filename, gcode_filename 
+        filenameQuery = """SELECT stl_filename, img_filename, gcode_filename 
                         FROM print_info 
-                        WHERE post_key='{post_key}'
+                        WHERE post_key = ?
                         """
-        filenameQueryData = db.execute(filenameQuery)
+        filenameQueryData = db.execute(filenameQuery, post_key)
         filenames = list(filenameQueryData[0].values())
         
         # REMOVE FILE FROM PROJECT DIR IF FILENAME NOT IN DATABASE
@@ -286,9 +300,7 @@ def deleteAndRefresh(argQuery, post_key):
                     print(f"{item[1].upper()} NOT FOUND IN EXPECTED DIRECTORY")
 
         print(f'Removing ENTRY {post_key} from DATABASE')
-        db.execute(f"DELETE \
-                    FROM print_info \
-                    WHERE post_key='{post_key}'")
+        db.execute(f"DELETE FROM print_info WHERE post_key = ?", post_key)
         return db.execute(argQuery)
         
     except:
