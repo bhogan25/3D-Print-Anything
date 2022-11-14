@@ -12,7 +12,7 @@ from helpers import accepted_extension, apology, filenameTaken
 app = Flask(__name__)
 
 # Configure SQLite database
-db = SQL("sqlite:///3d.db")
+db = SQL("sqlite:///3d_full.db")
 
 # Establish allowed img extentions
 ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
@@ -29,10 +29,10 @@ app.config['DEFAULT_IMAGE'] = "static/0perm-media/default-no-image.png"
 # Cashe Control
 @app.after_request
 def after_request(response):
-    """Ensure responses aren't cashed"""
-    response.headers["Cashe-Control"] = "no-cashe, no-store, must-revalidate"
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cashe"
+    response.headers["Pragma"] = "no-cache"
     return response
 
 
