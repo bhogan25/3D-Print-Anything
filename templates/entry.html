@@ -83,7 +83,7 @@
                     
                                 {% if entryData.stl_filename %}
                                     <form method="post" action="/entry">
-                                        <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.stl_filename }}">
+                                        <input class="form-control-file mx-auto w-auto" name="s"  type="text" hidden value="{{ entryData.post_key }}">
                                         <button class="btn btn-primary download" type="submit"><span class="filename" id="stl_filename">{{ entryData.stl_filename }}</span></button>
                                     </form>
                                     
@@ -99,7 +99,7 @@
 
                                 {% if entryData.gcode_filename %}
                                     <form method="post" action="/entry">
-                                        <input class="form-control-file mx-auto w-auto" name="download"  type="text" hidden value="{{ entryData.gcode_filename }}">
+                                        <input class="form-control-file mx-auto w-auto" name="g"  type="text" hidden value="{{ entryData.post_key }}">
                                         <button class="btn btn-primary download" type="submit"><span class="filename">{{ entryData.gcode_filename }}</span></button>
                                     </form>
                                 

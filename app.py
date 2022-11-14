@@ -6,13 +6,13 @@ from cs50 import SQL
 from flask import Flask, redirect, render_template, request, url_for, send_from_directory
 # from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
-from helpers import accepted_extension, apology
+from helpers import accepted_extension, apology, filenameTaken
 
 # Configure application
 app = Flask(__name__)
 
 # Configure SQLite database
-db = SQL("sqlite:///3d_full.db")
+db = SQL("sqlite:///3d.db")
 
 # Establish allowed img extentions
 ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
@@ -84,8 +84,8 @@ def entry():
         # DISPLAY AN ENTRY
         post_key = request.args.get('pk')
         try:
-            entryQuery = """SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename
-                            FROM print_info S
+            entryQuery = """SELECT title, desc, tstp, mtl, nzl, support, note, stl_filename, img_filename, gcode_filename, post_key
+                            FROM print_info
                             WHERE post_key = ?
                             """
             entryQueryData = db.execute(entryQuery, post_key)
@@ -96,27 +96,44 @@ def entry():
 
         except:
             # UNABLE TO EXECUTE SQL QUERY
-            return apology("Bad request", 400) 
+            return apology("Bad request", 400)
     
     if request.method == "POST":
         try:
             # DOWNLOAD FILE FROM /ENTRY
             if request.form:
-                media = request.form.get('download')
-                extention = media.rsplit('.', 1)[1].lower()
+                name = [n for n in request.form if n == "s" or n == "g"]
+                media_type = {
+                    'name': name[0],
+                    'path': None, 
+                    'column': None,
+                    }
 
-                if extention == 'stl':
-                    path = app.config['STL_UPLOADS']
+                if media_type["name"] == 's':
+                    media_type["path"] = app.config['STL_UPLOADS']
+                    media_type["column"] = 'stl_filename'
                 
-                elif extention == 'gcode':
-                    path = app.config['GCODE_UPLOADS']
+                elif media_type["name"] == 'g':
+                    media_type["path"] = app.config['GCODE_UPLOADS']
+                    media_type["column"] = "gcode_filename"
                 
                 else:
                     return apology("Client request for files not allowed", 400)
 
+            # QUERY DATABASE FOR FILENAME OF MEDIA
+            post_key = request.form.get(media_type["name"])
+            filenameQuery = f"""SELECT {media_type["column"]}
+                            FROM print_info
+                            WHERE post_key = ?"""
+
+            filenameQueryData = db.execute(filenameQuery, post_key)
+            print(filenameQueryData)
+            filenameList = list(filenameQueryData[0].values())
+            filename = filenameList[0]
+
             # SEND FILE {MEDIA} FROM {PATH} TO CLIENT AS ATTACHMENT
-            print(f'{extention.upper()} FILE ---"{media}"--- BEING RETRIEVED FROM ---{path}---')
-            return send_from_directory(path, media, as_attachment=True)
+            print(f'FILE ---"{filename}"--- BEING RETRIEVED FROM ---{media_type["path"]}---')
+            return send_from_directory(media_type["path"], filename, as_attachment=True)
         
         except:
             # UNABLE TO SEND FILE TO CLIENT FOR DOWNLOAD
@@ -192,47 +209,50 @@ def admin():
             if request.files:
                 """Check 1) Data names are correct
                          2) STL filename is present and has .stl extention
-                         3) File ext for each file is is valid
+                         3) File extention matches expected file extention for each file is is valid
                     """
                 for file in request.files:
                     filename = secure_filename(request.files[file].filename)
-                    inputName = request.files[file].name
 
                     # ENSURE STL FILE IS NOT ABSENT
-                    if inputName == 'stl_1':
+                    if file == 'stl_1':
                         if filename == '':
                             return apology('An STL file must be included to upload post', 400)
-                        ext = 'stl'
+                        expected_ext = 'stl'
                         column = 'stl_filename'
-                        uploadPath = app.config["STL_UPLOADS"]
+                        upload_path = app.config["STL_UPLOADS"]
                         
-                    elif inputName == 'img_1':
-                        ext = ALLOWED_IMAGE_EXTENSIONS
+                    elif file == 'img_1':
+                        expected_ext = ALLOWED_IMAGE_EXTENSIONS
                         column = 'img_filename'
-                        uploadPath = app.config["IMAGE_UPLOADS"]
+                        upload_path = app.config["IMAGE_UPLOADS"]
 
-                    elif inputName == 'gcode_1':
-                        ext = 'gcode'
+                    elif file == 'gcode_1':
+                        expected_ext = 'gcode'
                         column = 'gcode_filename'
-                        uploadPath = app.config["GCODE_UPLOADS"]
+                        upload_path = app.config["GCODE_UPLOADS"]
 
                     else:
                         # REDIRECT CLIENT IF NAME REQUESTED IS NOT RECOGNIZED
                         return redirect(url_for('admin'))
 
+                    # CHECK FILE EXTENTION WITH EXPECTED FILE EXTENTION
                     if filename != '':
-                        if not accepted_extension(filename, ext):
+                        if not accepted_extension(filename, expected_ext):
                             return apology('Unsupported file type submitted', 400)
-                        
+
                         else:
-                            dict = {
-                                'inputName': inputName, 
-                                'filename': filename,
-                                'column': column,
-                                'requestObj': request.files[file],
-                                'uploadPath': uploadPath
-                                }
-                            recieved_files.append(dict)
+                            if filenameTaken(filename, upload_path):
+                                return apology(f'Filename {filename} taken', 400)
+                            
+                            else:
+                                dict = {
+                                    'filename': filename,
+                                    'column': column,
+                                    'requestObj': request.files[file],
+                                    'upload_path': upload_path
+                                    }
+                                recieved_files.append(dict)
                     
             else:
                 # NO FILES RECEIVED FROM CLIENT
@@ -254,7 +274,7 @@ def admin():
             try:
                 for fileDict in recieved_files:
                     print(f"SAVING -- '{fileDict['filename']}' -- TO FILE SYSTEM")
-                    fileDict['requestObj'].save(os.path.join(fileDict['uploadPath'], fileDict['filename']))
+                    fileDict['requestObj'].save(os.path.join(fileDict['upload_path'], fileDict['filename']))
                     
                     print(f"SAVING -- '{fileDict['filename']}' -- TO DATABASE")
                     db.execute(f"UPDATE print_info \

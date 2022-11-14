@@ -1,3 +1,5 @@
+import os
+from functools import reduce
 from flask import render_template
 
 def apology(message, code=400):
@@ -14,7 +16,7 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
-def accepted_extension(filename, ext):
+def accepted_extension(filename: str, ext: str) -> str:
     if isinstance(ext, str):
         return ("." in filename and filename.rsplit('.', 1)[1].lower() == ext)
 
@@ -23,3 +25,18 @@ def accepted_extension(filename, ext):
     
     else:
         raise Exception('Unknown type')
+
+def filenameTaken(filename: str, path: str) -> bool:
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    new_files = files.copy()
+    new_files.append(filename)
+    files = set(files)
+    new_files = set(new_files)
+
+    if reduce(lambda x, y : x and y, map(lambda p, q: p == q,list(files),list(new_files)), True):
+        print("The lists are the same, duplicate found")
+        return True
+    else:
+        print("The lists are not the same, file is not duplicate")
+        return False
+
