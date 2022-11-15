@@ -1,6 +1,8 @@
 import os
-from functools import reduce
-from flask import render_template
+from functools import reduce, wraps
+from flask import render_template, session, redirect
+from admin_config import SESSION_ID
+
 
 def apology(message, code=400):
     """Render message as an apology to user."""
@@ -40,3 +42,14 @@ def filenameTaken(filename: str, path: str) -> bool:
         print("The lists are not the same, file is not duplicate")
         return False
 
+def login_required(f):
+    """
+    Decorate routes to require login.
+    https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("admin_id") != SESSION_ID:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function

@@ -1,29 +1,26 @@
 import os
 
+from flask_session import Session
 from secrets import token_hex
 from datetime import datetime
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, url_for, send_from_directory
+from flask import Flask, redirect, render_template, request, url_for, send_from_directory, session
 from werkzeug.utils import secure_filename
-from helpers import accepted_extension, apology, filenameTaken
+from helpers import accepted_extension, apology, filenameTaken, login_required
+from werkzeug.security import check_password_hash, generate_password_hash
+from admin_config import ADMIN_UN, ADMIN_PW, SESSION_ID, ALLOWED_IMAGE_EXTENSIONS, STL_UPLOADS, IMAGE_UPLOADS, GCODE_UPLOADS, pathList, DEFAULT_IMAGE
 
 # Configure application
 app = Flask(__name__)
 
+# Configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 # Configure SQLite database
 db = SQL("sqlite:///3d_full.db")
 
-# Establish allowed img extentions
-ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
-
-# Configure Upload Paths
-MAIN_PATH = str(os.getcwd())
-
-app.config['STL_UPLOADS'] = MAIN_PATH + "/static/stl"
-app.config["IMAGE_UPLOADS"] = MAIN_PATH + "/static/img"
-app.config['GCODE_UPLOADS'] = MAIN_PATH + "/static/gcode"
-pathList = [app.config['STL_UPLOADS'], app.config["IMAGE_UPLOADS"], app.config['GCODE_UPLOADS']]
-app.config['DEFAULT_IMAGE'] = "static/0perm-media/default-no-image.png"
 
 # Cashe Control
 @app.after_request
@@ -56,7 +53,7 @@ def index():
     except:
         print('UNABLE TO EXECUTE recentsQuery')
 
-    return render_template("index.html", defaultImage=app.config['DEFAULT_IMAGE'], recentsQueryData=recentsQueryData)
+    return render_template("index.html", defaultImage=DEFAULT_IMAGE, recentsQueryData=recentsQueryData)
 
 
 @app.route("/board", methods = ["GET"])
@@ -73,7 +70,7 @@ def board():
         except: 
             print("UNABLE TO EXECUTE boardQuery")
 
-        return render_template("board.html", defaultImage=app.config['DEFAULT_IMAGE'], boardQueryData=boardQueryData)
+        return render_template("board.html", defaultImage=DEFAULT_IMAGE, boardQueryData=boardQueryData)
 
 
 @app.route("/entry", methods=["GET", "POST"])
@@ -91,7 +88,7 @@ def entry():
             entryData = entryQueryData[0]
             print('FETCHED DATA FROM DATABASE:')
             print(entryData)
-            return render_template("entry.html", defaultImage=app.config['DEFAULT_IMAGE'], entryData=entryData)
+            return render_template("entry.html", defaultImage=DEFAULT_IMAGE, entryData=entryData)
 
         except:
             # UNABLE TO EXECUTE SQL QUERY
@@ -109,11 +106,11 @@ def entry():
                     }
 
                 if media_type["name"] == 's':
-                    media_type["path"] = app.config['STL_UPLOADS']
+                    media_type["path"] = STL_UPLOADS
                     media_type["column"] = 'stl_filename'
                 
                 elif media_type["name"] == 'g':
-                    media_type["path"] = app.config['GCODE_UPLOADS']
+                    media_type["path"] = GCODE_UPLOADS
                     media_type["column"] = "gcode_filename"
                 
                 else:
@@ -157,7 +154,7 @@ def search():
             searchQueryData = db.execute(searchQuery, "%" + q + "%")
             print(searchQueryData)
 
-        return render_template("search.html", defaultImage=app.config["DEFAULT_IMAGE"], searchQueryData=searchQueryData)
+        return render_template("search.html", defaultImage=DEFAULT_IMAGE, searchQueryData=searchQueryData)
 
 
 @app.route("/about", methods=["GET", "POST"])
@@ -167,7 +164,64 @@ def about():
     return render_template("about.html")
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log admin in"""
+
+    # FORGET ADMIN SESSION
+    session.clear()
+
+    # USER REACHES ROUTE VIA GET:
+    if request.method == "GET":
+        return render_template("login.html")
+
+    # IF ATTEMPT TO LOGIN AS ADMIN
+    if request.method == "POST":
+        un = request.form.get("username")
+        pw = request.form.get("password")
+
+        print(un, "\n",pw)
+        
+        # ENSURE USERNAME AND PASWORD ARE SUBMITTED
+        if not un or not pw:
+            return apology("Must provide username and password", 400)
+
+        # Verify admin username password
+        if un != ADMIN_UN or not check_password_hash(ADMIN_PW, pw):
+            return apology("invalid username/password", 400)
+
+        # elif not check_password_hash(ADMIN_PW, pw):
+        #     return apology("invalid password", 400)
+
+        else:
+            # If sucess remember admin is logged in
+            session['admin_id'] = SESSION_ID
+            print(f"Session established as --> {session['admin_id']}")
+
+        # # Query database for username
+        # rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username")) 
+
+        # # Ensure username exists and password is correct
+        # if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        #     return apology("invalid username and/or password", 400)
+
+        
+
+        # Redirect user to home page
+        return redirect("/")
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    session.clear()
+
+    # Redirect to homepage form
+    return redirect("/")
+        
+
+
 @app.route("/admin", methods=["GET", "POST"])
+@login_required
 def admin():
     """Page to control content uploaded to website"""
     adminQuery = """SELECT title, desc, tstp, mtl, support, nzl, note, post_key, stl_filename, img_filename, gcode_filename 
@@ -182,7 +236,7 @@ def admin():
             # UNABLE TO EXECUTE SQL QUERY FOR ADMIN VIEWING
             print("UNABLE TO EXECUTE adminQuery")
             
-        return render_template("admin.html", defaultImage=app.config["DEFAULT_IMAGE"], adminQueryData=adminQueryData)
+        return render_template("admin.html", defaultImage=DEFAULT_IMAGE, adminQueryData=adminQueryData)
         
     if request.method == "POST":
         if 'post_key' not in request.form:
@@ -219,17 +273,17 @@ def admin():
                             return apology('An STL file must be included to upload post', 400)
                         expected_ext = 'stl'
                         column = 'stl_filename'
-                        upload_path = app.config["STL_UPLOADS"]
+                        upload_path = STL_UPLOADS
                         
                     elif file == 'img_1':
                         expected_ext = ALLOWED_IMAGE_EXTENSIONS
                         column = 'img_filename'
-                        upload_path = app.config["IMAGE_UPLOADS"]
+                        upload_path = IMAGE_UPLOADS
 
                     elif file == 'gcode_1':
                         expected_ext = 'gcode'
                         column = 'gcode_filename'
-                        upload_path = app.config["GCODE_UPLOADS"]
+                        upload_path = GCODE_UPLOADS
 
                     else:
                         # REDIRECT CLIENT IF NAME REQUESTED IS NOT RECOGNIZED
@@ -282,7 +336,7 @@ def admin():
 
                 # REREQUERY FILES TO UPDATE ADMIN ENTRY TABLE
                 adminQueryData = db.execute(adminQuery)
-                return render_template('admin.html',  defaultImage=app.config["DEFAULT_IMAGE"], adminQueryData=adminQueryData)
+                return render_template('admin.html',  defaultImage=DEFAULT_IMAGE, adminQueryData=adminQueryData)
 
             except: 
                 # UNABLE TO SAVE FILE(S) TO DIR, DELETE DATA SAVED TO DATABASE FOR ENTRY
@@ -293,7 +347,7 @@ def admin():
             # DELETE ENTRY
             post_key = request.form.get("post_key")
             adminQueryData = deleteAndRefresh(adminQuery, post_key)
-            return render_template("admin.html", defaultImage=app.config["DEFAULT_IMAGE"], adminQueryData=adminQueryData)
+            return render_template("admin.html", defaultImage=DEFAULT_IMAGE, adminQueryData=adminQueryData)
 
 
 def deleteAndRefresh(argQuery, post_key):

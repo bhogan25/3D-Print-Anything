@@ -38,9 +38,14 @@
                         <li class="nav-item"><a class="nav-link" style="color: #ea433b;" href="/search">Search</a></li>
                         <li class="nav-item"><a class="nav-link" style="color: #f5b82e;" href="/about">About</a></li>
                     </ul>
-                    <ul class="navbar-nav ms-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" style="color: #2e944b;" href="/admin">Admin</a></li>
-                    </ul>
+
+                    {% if session["admin_id"] %}
+                        <ul class="navbar-nav ms-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" style="color: #2e944b;" href="/admin">Admin</a></li>
+                            <li class="nav-item"><a class="nav-link" style="color: #adadad;" href="/logout">Logout</a></li>
+                        </ul>
+                    {% endif %}
+
                 </div>
             </div>
         </nav>

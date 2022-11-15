@@ -11,6 +11,7 @@
 * CSS
 * [SQLite3](https://www.sqlite.org/index.html) - SQL database engine
 * [Three.js](https://threejs.org/) - JavaScript library for 3D rendering
+* JavaScript
 ## App Structure
 The app was designed with the intention of a single user, the admin, uploading entries composed of an image, 3D stl file, gcode, and general print information to be viewed by a user (the public).  Thus, the design of this app makes no attempt to handle large amounts of entries (150+).  The design is uses lightweight frameworks like sqlite and flask for simplicity. 
 
