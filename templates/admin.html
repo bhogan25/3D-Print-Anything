@@ -9,18 +9,22 @@
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="mb-5 col-lg-8 g-3">
-        <h1 class="mb-5 fw-light">Upload Entry</h1>
+        <div class="mb-5">
+            <h1 class="fw-light">Upload Entry</h1>
+            <p class="mt-3 small text-muted">only .stl, .gcode, .svg, .png, .jpg, and .jpeg files are submitable!</p>
+            <p class="small text-muted">Required*</p>
+        </div>
         <form action="/admin" method="post" enctype="multipart/form-data">
             <div class="mb-5">
     
     
                 <div class="mb-3 col-lg-4 col-md-3 col-sm-3 mx-auto">
-                    <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Print Title" type="text" required>
+                    <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Print Title*" type="text" required>
                 </div>
     
     
                 <div class="mb-3 col-lg-4 col-md-3 col-sm-3 mx-auto">
-                    <textarea class="form-control" rows="3" name="desc" placeholder="Print Description" required></textarea>
+                    <textarea class="form-control" rows="3" name="desc" placeholder="Print Description*" required></textarea>
                 </div>
     
     
@@ -58,7 +62,7 @@
     
 
                 <div class="mb-1 col-lg-4 col-md-3 col-sm-3 mx-auto">
-                    <label for="formFileOne" class="form-label">STL File </label>
+                    <label for="formFileOne" class="form-label">STL File* </label>
                     <input autocomplete="off" autofocus class="form-control" name="stl_1" type="file" id="formFileOne" required>
                 </div>
                 
