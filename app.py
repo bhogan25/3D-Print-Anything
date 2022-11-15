@@ -3,12 +3,11 @@ import os
 from flask_session import Session
 from secrets import token_hex
 from datetime import datetime
-from cs50 import SQL
 from flask import Flask, redirect, render_template, request, url_for, send_from_directory, session
 from werkzeug.utils import secure_filename
 from helpers import accepted_extension, apology, filenameTaken, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
-from admin_config import ADMIN_UN, ADMIN_PW, SESSION_ID, ALLOWED_IMAGE_EXTENSIONS, STL_UPLOADS, IMAGE_UPLOADS, GCODE_UPLOADS, pathList, DEFAULT_IMAGE
+from admin_config import ADMIN_UN, ADMIN_PW, SESSION_ID, ALLOWED_IMAGE_EXTENSIONS, db, STL_UPLOADS, IMAGE_UPLOADS, GCODE_UPLOADS, pathList, DEFAULT_IMAGE
 
 # Configure application
 app = Flask(__name__)
@@ -18,8 +17,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure SQLite database
-db = SQL("sqlite:///3d_full.db")
+
 
 
 # Cashe Control

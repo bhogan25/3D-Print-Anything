@@ -1,5 +1,6 @@
 import os
 from werkzeug.security import generate_password_hash
+from cs50 import SQL
 
 # Configure Admin username, password, session id and initial session value
 ADMIN_UN = "ADMIN"
@@ -8,6 +9,9 @@ SESSION_ID = "adm"
 
 # Establish allowed img extentions
 ALLOWED_IMAGE_EXTENSIONS = {'svg', 'png', 'jpg', 'jpeg'}
+
+# Configure SQLite database
+db = SQL("sqlite:///3d_full.db")
 
 # Configure Upload Paths
 MAIN_PATH = str(os.getcwd())

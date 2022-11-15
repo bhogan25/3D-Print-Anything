@@ -20,13 +20,14 @@
         <button class="btn btn-dark col-sm-2" type="submit">Search</button>
       </form>
     </div>
+    <p class="my-1">Search queries are by title (3 or more letters required)</p>
 
     {% if searchQueryData == None %}
       <div class="search-results">Sorry, no entries were found for your search :(</div>
 
     {% else -%}
 
-    
+      
       <p class="text-muted my-1">Results</p>
       <div class="row flex-wrap jusify-content-center">
         <div class="col-lg-2"></div>

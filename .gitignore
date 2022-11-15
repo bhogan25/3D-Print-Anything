@@ -1,5 +1,6 @@
-__pycashe__/
+__pycache__/
 static/gcode/
 static/img/
 static/stl/
 3d.db
+flask_session/
