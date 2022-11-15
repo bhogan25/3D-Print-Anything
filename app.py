@@ -4,7 +4,6 @@ from secrets import token_hex
 from datetime import datetime
 from cs50 import SQL
 from flask import Flask, redirect, render_template, request, url_for, send_from_directory
-# from werkzeug.wrappers import Response
 from werkzeug.utils import secure_filename
 from helpers import accepted_extension, apology, filenameTaken
 
@@ -150,7 +149,7 @@ def search():
     if request.method == "POST":
         searchQueryData = None
         q = request.form.get('q')
-        if q != '':
+        if q != '' and len(q) > 2:
             searchQuery = """SELECT title, img_filename, post_key 
                             FROM print_info
                             WHERE title LIKE ? 
@@ -236,7 +235,7 @@ def admin():
                         # REDIRECT CLIENT IF NAME REQUESTED IS NOT RECOGNIZED
                         return redirect(url_for('admin'))
 
-                    # CHECK FILE EXTENTION WITH EXPECTED FILE EXTENTION
+                    # ENSURE FILENAME: 1) NOT BLANK STING, 2) HAS EXPECTED FILE EXTENTION, 3) IS NOT DUPLICATE FILENAME
                     if filename != '':
                         if not accepted_extension(filename, expected_ext):
                             return apology('Unsupported file type submitted', 400)
