@@ -6,10 +6,10 @@
 <script type="importmap">
     {
         "imports": {
-            "three": "https://unpkg.com/three@0.144.0/build/three.module.js",
-            "STLLoader": "https://unpkg.com/three@0.144.0/examples/jsm/loaders/STLLoader.js",
-            "OrbitControls": "https://unpkg.com/three@0.144.0/examples/jsm/controls/OrbitControls.js",
-            "three/examples/jsm/libs/stats.module": "/jsm/libs/stats.module.js"
+            "three": "/static/js/three.module.js",
+            "STLLoader": "/static/js/STLLoader.js",
+            "OrbitControls": "/static/js/OrbitControls.js",
+            "Stats": "/static/js/stats.module.js"
         }
     }
 </script>
@@ -22,7 +22,6 @@
         {{ entryData.title }}
 
 {% endblock %}
-
 
 {% block main %}
     <div class="title-group">
